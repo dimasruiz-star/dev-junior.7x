@@ -225,22 +225,114 @@
             line-height: 1.7;
         }
 
-        /* TARJETAS DE MOMENTOS */
-        .moments-grid {
+        /* GALERÍA POLAROID QUE SE VOLTEA */
+        .polaroid-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
+            gap: 25px;
+            margin-top: 15px;
         }
-        .moment-card {
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 20px;
-            padding: 25px;
-            text-align: center;
-            border: 1px solid var(--card-border);
+
+        .polaroid-card {
+            background: transparent;
+            perspective: 1000px;
+            height: 310px;
             cursor: pointer;
         }
-        .moment-card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .moment-icon { font-size: 2.8rem; margin-bottom: 10px; }
+
+        .polaroid-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .polaroid-card.flipped .polaroid-inner {
+            transform: rotateY(180deg);
+        }
+
+        .polaroid-front, .polaroid-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 12px 12px 20px 12px;
+            background: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            color: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .polaroid-front img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .polaroid-front .caption {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            color: #ff2a6d;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .polaroid-back {
+            background: linear-gradient(135deg, #ff758c, #ff2a6d);
+            color: #ffffff;
+            transform: rotateY(180deg);
+            justify-content: center;
+            padding: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .polaroid-back p {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .polaroid-back .date-tag {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        /* BUZÓN DE MENSAJES PARA WHATSAPP */
+        .message-box-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message-textarea {
+            width: 100%;
+            height: 120px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--secondary);
+            border-radius: 18px;
+            padding: 15px;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            resize: none;
+            outline: none;
+        }
+
+        .message-textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(255, 42, 109, 0.3);
+        }
 
         /* TARJETA RASPA Y GANA */
         .scratch-card {
@@ -440,24 +532,74 @@
             </div>
         </div>
 
-        <!-- GALERÍA DE MOMENTOS INTERACTIVA -->
+        <!-- EL DIARIO DE NUESTRO AMOR -->
         <div class="card">
-            <h2>✨ Nuestros Pequeños Detalles</h2>
-            <div class="moments-grid">
-                <div class="moment-card" onclick="alert('🌟 Momentos inolvidables: Cada llamada nocturna platicando de todo y de nada a la vez.')">
-                    <div class="moment-icon">🌙</div>
-                    <div style="font-weight:600; color:var(--accent);">Noches de Chat</div>
-                    <div style="font-size:0.85rem; color:var(--text-sub); margin-top:5px;">Toca para recordar</div>
+            <h2>🔮 El Diario de Nuestro Amor</h2>
+            <div class="phrase-box" style="border-style: solid; border-color: var(--primary);">
+                <div style="font-size: 0.9rem; color: var(--accent); font-weight: 600; text-transform: uppercase; margin-bottom: 10px;" id="dailyHeader">Mensaje de Hoy</div>
+                <div class="phrase-text" id="dailyMsg" style="font-size: 1.15rem; min-height: auto;">Cargando pensamiento del día...</div>
+            </div>
+        </div>
+
+        <!-- GALERÍA POLAROID INTERACTIVA (SE VOLTEAN AL TOCAR) -->
+        <div class="card">
+            <h2>📸 Galería de Recuerdos Especiales</h2>
+            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;">[ Toca una foto para descubrir el mensaje detrás ]</p>
+            <div class="polaroid-grid">
+                
+                <!-- Polaroid 1 -->
+                <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
+                    <div class="polaroid-inner">
+                        <div class="polaroid-front">
+                            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600&auto=format&fit=crop" alt="Recuerdo 1">
+                            <div class="caption">Noches de Chat 🌙</div>
+                        </div>
+                        <div class="polaroid-back">
+                            <p>"Esas conversaciones hasta tarde donde las horas se nos pasan volando."</p>
+                            <div class="date-tag">Siempre ✨</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="moment-card" onclick="alert('💖 Lo que más amo: Tu sonrisa en fotos y cómo me respondes al instante.')">
-                    <div class="moment-icon">📸</div>
-                    <div style="font-weight:600; color:var(--accent);">Tus Sonrisas</div>
-                    <div style="font-size:0.85rem; color:var(--text-sub); margin-top:5px;">Toca para recordar</div>
+
+                <!-- Polaroid 2 -->
+                <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
+                    <div class="polaroid-inner">
+                        <div class="polaroid-front">
+                            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600&auto=format&fit=crop" alt="Recuerdo 2">
+                            <div class="caption">Tu Sonrisa 💖</div>
+                        </div>
+                        <div class="polaroid-back">
+                            <p>"Ver tu sonrisa en fotos es mi momento favorito de cualquier día."</p>
+                            <div class="date-tag">Mi Favorito 🥰</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="moment-card" onclick="alert('🚀 Nuestro Gran Sueño: El primer abrazo en persona que nos quitaremos las ganas de darnos.')">
-                    <div class="moment-icon">✈️</div>
-                    <div style="font-weight:600; color:var(--accent);">Nuestro Encuentro</div>
-                    <div style="font-size:0.85rem; color:var(--text-sub); margin-top:5px;">Toca para recordar</div>
+
+                <!-- Polaroid 3 -->
+                <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
+                    <div class="polaroid-inner">
+                        <div class="polaroid-front">
+                            <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=600&auto=format&fit=crop" alt="Recuerdo 3">
+                            <div class="caption">Nuestro Encuentro ✈️</div>
+                        </div>
+                        <div class="polaroid-back">
+                            <p>"Contando los días para ese abrazo apretado que tanto soñamos."</p>
+                            <div class="date-tag">Muy Pronto 🌹</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- BUZÓN DE MENSAJES PARA JUNIOR (ENVÍA A WHATSAPP) -->
+        <div class="card">
+            <h2>💌 Deja una Nota para Junior</h2>
+            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;">Escribe una notita aquí y llegará directo a mi WhatsApp:</p>
+            <div class="message-box-container">
+                <textarea class="message-textarea" id="juliethNote" placeholder="Escribe aquí tu mensaje o respuesta con amor, mi vida... ❤️"></textarea>
+                <div style="text-align:center;">
+                    <button class="btn-magic" onclick="sendToWhatsApp()">📲 Enviar Notita a Junior</button>
                 </div>
             </div>
         </div>
@@ -642,6 +784,9 @@
 
                     // NOTIFICACIONES
                     initAutoNotifications();
+
+                    // CARGAR MENSAJE DEL DÍA
+                    loadDailyMessage();
                 }, 600);
             }, 1800);
         }
@@ -659,10 +804,38 @@
             }
         }
 
+        // ENVIAR MENSAJE A WHATSAPP
+        function sendToWhatsApp() {
+            const noteText = document.getElementById('juliethNote').value.trim();
+            if (noteText === "") {
+                alert("Por favor escribe una notita antes de enviar ❤️");
+                return;
+            }
+            const encodedText = encodeURIComponent("Hola mi amor ❤️ Te dejé esta notita desde la página web:\n\n\"" + noteText + "\"");
+            window.open("https://api.whatsapp.com/send?text=" + encodedText, "_blank");
+        }
+
+        // LÓGICA DEL DIARIO DE NUESTRO AMOR (MENSAJE POR DÍA DE LA SEMANA)
+        const dailyMessages = [
+            { day: "Domingo ☀️", msg: "\"Cerrando la semana dando gracias por tenerte a mi lado. Te amo infinitamente.\"" },
+            { day: "Lunes 💖", msg: "\"Iniciando la semana pensando en ti. Eres mi motor favorito para empezar con una sonrisa.\"" },
+            { day: "Martes 🌸", msg: "\"Paso a recordarte que hoy y siempre eres lo más bonito que me ha pasado.\"" },
+            { day: "Miércoles ✨", msg: "\"Mitad de semana y mi corazón sigue lleno de ganas de darte ese abrazo tan esperado.\"" },
+            { day: "Jueves 🌹", msg: "\"Cada día que pasa es un día menos para estar juntos. Falta muy poco, mi vida.\"" },
+            { day: "Viernes 🎉", msg: "\"¡Llegó el fin de semana! Que sea un día hermoso para ti, mi reina.\"" },
+            { day: "Sábado 🌙", msg: "\"Un sábado perfecto para recordarte cuánto me encantas y lo feliz que me haces.\"" }
+        ];
+
+        function loadDailyMessage() {
+            const today = new Date().getDay();
+            document.getElementById('dailyHeader').innerText = `Mensaje de hoy (${dailyMessages[today].day})`;
+            document.getElementById('dailyMsg').innerText = dailyMessages[today].msg;
+        }
+
         // REPRODUCCIÓN EN SEGUNDO PLANO AL 20% (0.2 DE VOLUMEN)
         function playAudioAuto() {
             const music = document.getElementById('bgMusic');
-            music.volume = 0.2; // Configurado al 20%
+            music.volume = 0.2;
             music.play().catch(err => {
                 console.log("El navegador requiere interacción previa:", err);
             });
