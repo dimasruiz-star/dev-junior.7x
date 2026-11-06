@@ -184,6 +184,17 @@
             text-shadow: 0 0 12px rgba(255, 42, 109, 0.4);
         }
 
+        /* REPRODUCTOR DE MÚSICA */
+        .music-player {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--secondary);
+            padding: 15px 25px;
+            border-radius: 20px;
+        }
+
         /* DEDICATORIA ESPECIAL */
         .special-badge {
             background: rgba(255, 42, 109, 0.08);
@@ -225,18 +236,7 @@
             line-height: 1.7;
         }
 
-        /* REPRODUCTOR DE MÚSICA */
-        .music-player {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--secondary);
-            padding: 15px 25px;
-            border-radius: 20px;
-        }
-
-        /* TARJETAS DE MOMENTOS / FOTOS */
+        /* TARJETAS DE MOMENTOS */
         .moments-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -435,17 +435,19 @@
             <div class="badge-tag">🌹 Nuestra historia juntos desde el 15.09.2025</div>
         </header>
 
-        <!-- REPRODUCTOR DE MÚSICA DE FONDO -->
+        <!-- REPRODUCTOR DE MÚSICA DE FONDO AUTOMÁTICO -->
         <div class="card">
             <h2>🎵 Nuestra Melodía Especial</h2>
             <div class="music-player">
                 <div>
-                    <div style="font-weight:600; color:#fff;">Perfect - Ed Sheeran (Piano Cover)</div>
-                    <div style="font-size:0.85rem; color:var(--text-sub);">Nuestra banda sonora ❤️</div>
+                    <!-- EDITA AQUÍ EL NOMBRE DE TU CANCIÓN -->
+                    <div style="font-weight:600; color:#fff;" id="songTitle">Nuestra Canción Especial</div>
+                    <div style="font-size:0.85rem; color:var(--text-sub);">Reproduciéndose de fondo ❤️</div>
                 </div>
-                <button class="btn-magic" id="musicBtn" onclick="toggleMusic()">▶️ Reproducir</button>
+                <button class="btn-magic" id="musicBtn" onclick="toggleMusic()">⏸️ Pausar</button>
             </div>
-            <audio id="bgMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+            <!-- EDITA AQUÍ LA RUTA O LINK DE TU ARCHIVO MP3 (ej. cancion.mp3) -->
+            <audio id="bgMusic" loop src="cancion.mp3"></audio>
         </div>
 
         <!-- DEDICATORIA ESPECIAL -->
@@ -475,7 +477,7 @@
                     <div style="font-weight:600; color:var(--accent);">Tus Sonrisas</div>
                     <div style="font-size:0.85rem; color:var(--text-sub); margin-top:5px;">Toca para recordar</div>
                 </div>
-                <div class="moment-card" onclick="alert('🚀 Nuestro Gran Sueño: El primer abrazo en persona que nos quitaremos la ganas de darnos.')">
+                <div class="moment-card" onclick="alert('🚀 Nuestro Gran Sueño: El primer abrazo en persona que nos quitaremos las ganas de darnos.')">
                     <div class="moment-icon">✈️</div>
                     <div style="font-weight:600; color:var(--accent);">Nuestro Encuentro</div>
                     <div style="font-size:0.85rem; color:var(--text-sub); margin-top:5px;">Toca para recordar</div>
@@ -657,6 +659,11 @@
                 setTimeout(() => {
                     lockScreen.classList.add('unlocked');
                     mainContainer.classList.add('show');
+                    
+                    // REPRODUCCIÓN AUTOMÁTICA DE MÚSICA AL INGRESAR
+                    playAudioAuto();
+
+                    // NOTIFICACIONES
                     initAutoNotifications();
                 }, 600);
             }, 1800);
@@ -675,7 +682,18 @@
             }
         }
 
-        // REPRODUCTOR DE MÚSICA
+        // CONTROL Y REPRODUCCIÓN AUTOMÁTICA DE MÚSICA
+        function playAudioAuto() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+            music.play().then(() => {
+                btn.innerText = "⏸️ Pausar";
+            }).catch(err => {
+                console.log("Autoplay bloqueado por el navegador:", err);
+                btn.innerText = "▶️ Reproducir";
+            });
+        }
+
         function toggleMusic() {
             const music = document.getElementById('bgMusic');
             const btn = document.getElementById('musicBtn');
@@ -725,37 +743,31 @@
                 const minutes = now.getMinutes();
 
                 if (minutes === 0) {
-                    // 1. BUENOS DÍAS A LAS 8:00 AM
                     if (hours === 8) {
                         new Notification("¡Buenos días, mi amor! ☀️", { 
                             body: "Espero que tengas un día maravilloso. Te amo infinitamente. ❤️" 
                         });
                     }
-                    // 2. MEDIA MAÑANA A LAS 11:00 AM
                     else if (hours === 11) {
                         new Notification("Paso a recordarte... ☕✨", { 
                             body: "Que eres la persona más hermosa del mundo y mi pensamiento favorito del día." 
                         });
                     }
-                    // 3. HORA DE ALMUERZO A LAS 1:00 PM (13:00 HS)
                     else if (hours === 13) {
                         new Notification("Recordatorio con amor 🍽️💕", { 
                             body: "Paso a recordarte que almuerces rico y tengas una linda tarde. ¡Te mando un beso!" 
                         });
                     }
-                    // 4. MEDIA TARDE A LAS 5:00 PM (17:00 HS)
                     else if (hours === 17) {
                         new Notification("Pensando en ti ✨🥰", { 
                             body: "Solo quería recordarte lo especial que eres para mí y lo mucho que me alegras la vida." 
                         });
                     }
-                    // 5. NOCHE A LAS 8:00 PM (20:00 HS)
                     else if (hours === 20) {
                         new Notification("Un detalle para mi reina 🌹💖", { 
                             body: "Gracias por hacer que cada día sea más bonito. Ya falta menos para darnos ese abrazo." 
                         });
                     }
-                    // 6. BUENAS NOCHES A LAS 10:00 PM (22:00 HS)
                     else if (hours === 22) {
                         new Notification("Buenas noches, mi vida 🌙", { 
                             body: "Que tengas los sueños más dulces. Un abrazo fuerte a la distancia. ✨" 
@@ -817,7 +829,7 @@
             "Porque admiro tu forma de ser y la ternura de tus mensajes.",
             "Porque a tu lado siento una paz y una felicidad incomparables.",
             "Porque eres mi persona favorita para hablar antes de dormir.",
-            "Porque me haces querer ser mejor persona cada día."
+            "Porque me me haces querer ser mejor persona cada día."
         ];
         function generateReason() {
             const r = reasons[Math.floor(Math.random() * reasons.length)];
