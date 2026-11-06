@@ -225,21 +225,23 @@
             line-height: 1.7;
         }
 
-        /* CONTADOR DE ABRAZOS */
-        .hug-box {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.04);
+        /* TARJETA RASPA Y GANA */
+        .scratch-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px dashed var(--secondary);
             border-radius: 20px;
             padding: 25px;
-            border: 1px dashed var(--secondary);
+            text-align: center;
+            cursor: pointer;
+            position: relative;
         }
 
-        .hug-count {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--secondary);
-            margin: 10px 0;
-            text-shadow: 0 0 15px rgba(255, 117, 140, 0.5);
+        .scratch-content {
+            font-size: 1.15rem;
+            color: var(--accent);
+            font-weight: 600;
+            display: none;
+            line-height: 1.6;
         }
 
         /* LÍNEA DE TIEMPO */
@@ -418,13 +420,23 @@
             </div>
         </div>
 
-        <!-- CONTADOR DE ABRAZOS VIRTUALES -->
+        <!-- TARJETA DE RASPA Y GANA -->
         <div class="card">
-            <h2>🤗 Nuestro Contador de Abrazos</h2>
-            <div class="hug-box">
-                <p style="color:var(--text-sub); font-size:0.95rem;">Toca el botón para enviarme un abrazo y acumularlo para cuando nos veamos:</p>
-                <div class="hug-count" id="hugCounter">0</div>
-                <button class="btn-magic" onclick="addHug()">🫂 ¡Enviar Abrazo!</button>
+            <h2>🎁 Rasca tu Sorpresa de Hoy</h2>
+            <div class="scratch-card" id="scratchCard" onclick="revealScratch()">
+                <p id="scratchCover" style="font-size:1.1rem; color:var(--secondary); font-weight:600;">✨ Toca aquí para descubrir tu regalo sorpresa de hoy ✨</p>
+                <div class="scratch-content" id="scratchContent">
+                    "🎟️ Cupón Válido Por: Un abrazo gigante que dure más de 5 minutos cuando nos veamos." ❤️🫂
+                </div>
+            </div>
+        </div>
+
+        <!-- TE AMO EN IDIOMAS -->
+        <div class="card">
+            <h2>🌍 Te Amo en Todos los Idiomas</h2>
+            <div class="phrase-box">
+                <div class="phrase-text" id="langDisplay">"Je t'aime" (Francés 🇫🇷)</div>
+                <button class="btn-magic" onclick="nextLang()">🌐 Cambiar Idioma</button>
             </div>
         </div>
 
@@ -573,7 +585,6 @@
                 setTimeout(() => {
                     lockScreen.classList.add('unlocked');
                     mainContainer.classList.add('show');
-                    // ACTIVAR NOTIFICACIONES AUTOMÁTICAS AL DESBLOQUEAR
                     initAutoNotifications();
                 }, 600);
             }, 1800);
@@ -592,7 +603,7 @@
             }
         }
 
-        // ACTIVACIÓN AUTOMÁTICA DE NOTIFICACIONES
+        // ACTIVACIÓN AUTOMÁTICA DE NOTIFICACIONES MULTIPLICADAS (8 AM, 11 AM, 1 PM, 5 PM, 8 PM, 10 PM)
         function initAutoNotifications() {
             if ("Notification" in window) {
                 if (Notification.permission === "granted") {
@@ -600,9 +611,8 @@
                 } else if (Notification.permission !== "denied") {
                     Notification.requestPermission().then(permission => {
                         if (permission === "granted") {
-                            // NOTIFICACIÓN BIENVENIDA INICIAL
-                            new Notification("Mensaje de Junior ❤️", {
-                                body: "¡Notificaciones de amor activadas! Te llegarán mensajes en el transcurso del día. 🥰"
+                            new Notification("Junior & Julieth ❤️", {
+                                body: "¡Notificaciones automáticas activadas! Te acompañaré con mensajes durante todo el día. 🥰"
                             });
                             startScheduledNotifications();
                         }
@@ -612,41 +622,79 @@
         }
 
         function startScheduledNotifications() {
-            // Revisa el reloj del teléfono cada minuto para enviar los mensajes en los horarios clave
             setInterval(() => {
                 const now = new Date();
                 const hours = now.getHours();
                 const minutes = now.getMinutes();
 
                 if (minutes === 0) {
+                    // 1. BUENOS DÍAS A LAS 8:00 AM
                     if (hours === 8) {
-                        new Notification("Buenos días, mi amor ☀️", { 
-                            body: "Paso a desearte un día hermoso. Te amo muchísimo. ❤️" 
+                        new Notification("¡Buenos días, mi amor! ☀️", { 
+                            body: "Espero que tengas un día maravilloso. Te amo infinitamente. ❤️" 
                         });
-                    } else if (hours === 15) {
-                        new Notification("Pensando en ti 💕", { 
-                            body: "Espero que tu día vaya muy bonito. Recuerda lo especial que eres para mí. ✨" 
+                    }
+                    // 2. MEDIA MAÑANA A LAS 11:00 AM
+                    else if (hours === 11) {
+                        new Notification("Paso a recordarte... ☕✨", { 
+                            body: "Que eres la persona más hermosa del mundo y mi pensamiento favorito del día." 
                         });
-                    } else if (hours === 21) {
+                    }
+                    // 3. HORA DE ALMUERZO A LAS 1:00 PM (13:00 HS)
+                    else if (hours === 13) {
+                        new Notification("Recordatorio con amor 🍽️💕", { 
+                            body: "Paso a recordarte que almuerces rico y tengas una linda tarde. ¡Te mando un beso!" 
+                        });
+                    }
+                    // 4. MEDIA TARDE A LAS 5:00 PM (17:00 HS)
+                    else if (hours === 17) {
+                        new Notification("Pensando en ti ✨🥰", { 
+                            body: "Solo quería recordarte lo especial que eres para mí y lo mucho que me alegras la vida." 
+                        });
+                    }
+                    // 5. NOCHE A LAS 8:00 PM (20:00 HS)
+                    else if (hours === 20) {
+                        new Notification("Un detalle para mi reina 🌹💖", { 
+                            body: "Gracias por hacer que cada día sea más bonito. Ya falta menos para darnos ese abrazo." 
+                        });
+                    }
+                    // 6. BUENAS NOCHES A LAS 10:00 PM (22:00 HS)
+                    else if (hours === 22) {
                         new Notification("Buenas noches, mi vida 🌙", { 
-                            body: "Que tengas los sueños más dulces. Un abrazo fuerte a la distancia. 🥰" 
+                            body: "Que tengas los sueños más dulces. Un abrazo fuerte a la distancia. ✨" 
                         });
                     }
                 }
             }, 60000);
         }
 
+        // REVELAR SORPRESA RASPA Y GANA
+        function revealScratch() {
+            document.getElementById('scratchCover').style.display = 'none';
+            document.getElementById('scratchContent').style.display = 'block';
+        }
+
+        // IDIOMAS DE TE AMO
+        const langs = [
+            "\"Je t'aime\" (Francés 🇫🇷)",
+            "\"Ti amo\" (Italiano 🇮🇹)",
+            "\"I love you\" (Inglés 🇬🇧)",
+            "\"Ich liebe dich\" (Alemán 🇩🇪)",
+            "\"Aishiteru\" (Japonés 🇯🇵)",
+            "\"Saranghae\" (Coreano 🇰🇷)",
+            "\"Eu te amo\" (Portugués 🇧🇷)",
+            "\"Ya tebya lyublyu\" (Ruso 🇷🇺)"
+        ];
+        let langIdx = 0;
+        function nextLang() {
+            langIdx = (langIdx + 1) % langs.length;
+            document.getElementById('langDisplay').innerText = langs[langIdx];
+        }
+
         // REVELAR NOTA ESPECIAL
         function toggleSpecialSecret() {
             const secret = document.getElementById('specialSecret');
             secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
-        }
-
-        // CONTADOR DE ABRAZOS
-        let hugCount = 0;
-        function addHug() {
-            hugCount++;
-            document.getElementById('hugCounter').innerText = hugCount;
         }
 
         // CONTADOR DE TIEMPO
