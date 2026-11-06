@@ -225,6 +225,34 @@
             line-height: 1.7;
         }
 
+        /* REPRODUCTOR DE MÚSICA */
+        .music-player {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--secondary);
+            padding: 15px 25px;
+            border-radius: 20px;
+        }
+
+        /* TARJETAS DE MOMENTOS / FOTOS */
+        .moments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+        .moment-card {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid var(--card-border);
+            cursor: pointer;
+        }
+        .moment-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .moment-icon { font-size: 2.8rem; margin-bottom: 10px; }
+
         /* TARJETA RASPA Y GANA */
         .scratch-card {
             background: rgba(0, 0, 0, 0.4);
@@ -407,6 +435,19 @@
             <div class="badge-tag">🌹 Nuestra historia juntos desde el 15.09.2025</div>
         </header>
 
+        <!-- REPRODUCTOR DE MÚSICA DE FONDO -->
+        <div class="card">
+            <h2>🎵 Nuestra Melodía Especial</h2>
+            <div class="music-player">
+                <div>
+                    <div style="font-weight:600; color:#fff;">Perfect - Ed Sheeran (Piano Cover)</div>
+                    <div style="font-size:0.85rem; color:var(--text-sub);">Nuestra banda sonora ❤️</div>
+                </div>
+                <button class="btn-magic" id="musicBtn" onclick="toggleMusic()">▶️ Reproducir</button>
+            </div>
+            <audio id="bgMusic" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+        </div>
+
         <!-- DEDICATORIA ESPECIAL -->
         <div class="card">
             <h2>✨ Un Regalo Especial para Julieth</h2>
@@ -420,6 +461,28 @@
             </div>
         </div>
 
+        <!-- GALERÍA DE MOMENTOS INTERACTIVA -->
+        <div class="card">
+            <h2>✨ Nuestros Pequeños Detalles</h2>
+            <div class="moments-grid">
+                <div class="moment-card" onclick="alert('🌟 Momentos inolvidables: Cada llamada nocturna platicando de todo y de nada a la vez.')">
+                    <div class="moment-icon">🌙</div>
+                    <div style="font-weight:600; color:var(--accent);">Noches de Chat</div>
+                    <div style="font-size:0.85rem; color:var(--text-sub); margin-top:5px;">Toca para recordar</div>
+                </div>
+                <div class="moment-card" onclick="alert('💖 Lo que más amo: Tu sonrisa en fotos y cómo me respondes al instante.')">
+                    <div class="moment-icon">📸</div>
+                    <div style="font-weight:600; color:var(--accent);">Tus Sonrisas</div>
+                    <div style="font-size:0.85rem; color:var(--text-sub); margin-top:5px;">Toca para recordar</div>
+                </div>
+                <div class="moment-card" onclick="alert('🚀 Nuestro Gran Sueño: El primer abrazo en persona que nos quitaremos la ganas de darnos.')">
+                    <div class="moment-icon">✈️</div>
+                    <div style="font-weight:600; color:var(--accent);">Nuestro Encuentro</div>
+                    <div style="font-size:0.85rem; color:var(--text-sub); margin-top:5px;">Toca para recordar</div>
+                </div>
+            </div>
+        </div>
+
         <!-- TARJETA DE RASPA Y GANA -->
         <div class="card">
             <h2>🎁 Rasca tu Sorpresa de Hoy</h2>
@@ -428,6 +491,15 @@
                 <div class="scratch-content" id="scratchContent">
                     "🎟️ Cupón Válido Por: Un abrazo gigante que dure más de 5 minutos cuando nos veamos." ❤️🫂
                 </div>
+            </div>
+        </div>
+
+        <!-- GENERADOR DE DESEOS PARA EL FUTURO -->
+        <div class="card">
+            <h2>✨ Generador de Deseos Juntos</h2>
+            <div class="phrase-box">
+                <div class="phrase-text" id="wishDisplay">"Toca el botón para ver un plan o deseo que cumpliremos juntos..."</div>
+                <button class="btn-magic" onclick="generateWish()">🌟 Descubrir Deseo</button>
             </div>
         </div>
 
@@ -601,6 +673,31 @@
                 lockText.innerText = "Mantén presionada la huella ♥";
                 lockText.style.color = "var(--text-sub)";
             }
+        }
+
+        // REPRODUCTOR DE MÚSICA
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const btn = document.getElementById('musicBtn');
+            if (music.paused) {
+                music.play();
+                btn.innerText = "⏸️ Pausar";
+            } else {
+                music.pause();
+                btn.innerText = "▶️ Reproducir";
+            }
+        }
+
+        // GENERADOR DE DESEOS FUTUROS
+        const wishes = [
+            "Ir por un helado y caminar juntos riéndonos de cualquier tontería.",
+            "Tener una tarde completa para ver películas abrazados sin ver el reloj.",
+            "Tomarnos miles de fotos juntos para llenar un álbum completo.",
+            "Viajar a un lugar bonito y tomarnos de la mano frente al atardecer."
+        ];
+        function generateWish() {
+            const w = wishes[Math.floor(Math.random() * wishes.length)];
+            document.getElementById('wishDisplay').innerText = `"${w}"`;
         }
 
         // ACTIVACIÓN AUTOMÁTICA DE NOTIFICACIONES MULTIPLICADAS (8 AM, 11 AM, 1 PM, 5 PM, 8 PM, 10 PM)
