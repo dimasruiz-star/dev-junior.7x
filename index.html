@@ -397,7 +397,7 @@
 
     <canvas id="canvas-bg"></canvas>
 
-    <!-- ELEMENTO DE AUDIO OCULTO (SUENA DE FONDO AUTOMÁTICAMENTE AL 40% DE VOLUMEN) -->
+    <!-- ELEMENTO DE AUDIO OCULTO (SUENA DE FONDO AUTOMÁTICAMENTE AL 30% DE VOLUMEN) -->
     <audio id="bgMusic" loop src="cancion.mp3"></audio>
 
     <!-- PANTALLA DE INICIO CON HUELLA DACTILAR -->
@@ -637,7 +637,7 @@
                     lockScreen.classList.add('unlocked');
                     mainContainer.classList.add('show');
                     
-                    // REPRODUCCIÓN AUTOMÁTICA EN SEGUNDO PLANO AL 40% DE VOLUMEN
+                    // REPRODUCCIÓN AUTOMÁTICA EN SEGUNDO PLANO AL 30% DE VOLUMEN
                     playAudioAuto();
 
                     // NOTIFICACIONES
@@ -659,10 +659,10 @@
             }
         }
 
-        // REPRODUCCIÓN EN SEGUNDO PLANO AL 40% (0.4 DE VOLUMEN)
+        // REPRODUCCIÓN EN SEGUNDO PLANO AL 30% (0.3 DE VOLUMEN)
         function playAudioAuto() {
             const music = document.getElementById('bgMusic');
-            music.volume = 0.4; // Ajusta el volumen exactamente al 40%
+            music.volume = 0.3; // Ajustado exactamente al 30%
             music.play().catch(err => {
                 console.log("El navegador requiere interacción previa:", err);
             });
