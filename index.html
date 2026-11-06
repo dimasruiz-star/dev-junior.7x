@@ -308,7 +308,7 @@
             font-weight: bold;
         }
 
-        /* BUZÓN DE MENSAJES PARA WHATSAPP */
+        /* BUZÓN DE MENSAJES CON NOTIFICACIÓN */
         .message-box-container {
             display: flex;
             flex-direction: column;
@@ -489,7 +489,7 @@
 
     <canvas id="canvas-bg"></canvas>
 
-    <!-- ELEMENTO DE AUDIO OCULTO (SUENA DE FONDO AUTOMÁTICAMENTE AL 20% DE VOLUMEN) -->
+    <!-- AUDIO OCULTO (20% VOLUMEN) -->
     <audio id="bgMusic" loop src="cancion.mp3"></audio>
 
     <!-- PANTALLA DE INICIO CON HUELLA DACTILAR -->
@@ -541,13 +541,12 @@
             </div>
         </div>
 
-        <!-- GALERÍA POLAROID INTERACTIVA (SE VOLTEAN AL TOCAR) -->
+        <!-- GALERÍA POLAROID -->
         <div class="card">
             <h2>📸 Galería de Recuerdos Especiales</h2>
             <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;">[ Toca una foto para descubrir el mensaje detrás ]</p>
             <div class="polaroid-grid">
                 
-                <!-- Polaroid 1 -->
                 <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
                     <div class="polaroid-inner">
                         <div class="polaroid-front">
@@ -561,7 +560,6 @@
                     </div>
                 </div>
 
-                <!-- Polaroid 2 -->
                 <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
                     <div class="polaroid-inner">
                         <div class="polaroid-front">
@@ -575,7 +573,6 @@
                     </div>
                 </div>
 
-                <!-- Polaroid 3 -->
                 <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
                     <div class="polaroid-inner">
                         <div class="polaroid-front">
@@ -592,19 +589,19 @@
             </div>
         </div>
 
-        <!-- BUZÓN DE MENSAJES PARA JUNIOR (ENVÍA A WHATSAPP) -->
+        <!-- BUZÓN DE MENSAJES (ENVÍA NOTIFICACIÓN PUSH DIRECTA A TU CELULAR) -->
         <div class="card">
             <h2>💌 Deja una Nota para Junior</h2>
-            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;">Escribe una notita aquí y llegará directo a mi WhatsApp:</p>
+            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;">Escribe una notita y me llegará una notificación al instante:</p>
             <div class="message-box-container">
                 <textarea class="message-textarea" id="juliethNote" placeholder="Escribe aquí tu mensaje o respuesta con amor, mi vida... ❤️"></textarea>
                 <div style="text-align:center;">
-                    <button class="btn-magic" onclick="sendToWhatsApp()">📲 Enviar Notita a Junior</button>
+                    <button class="btn-magic" onclick="sendDirectNotification()">💖 Enviar Notita a Junior</button>
                 </div>
             </div>
         </div>
 
-        <!-- TARJETA DE RASPA Y GANA -->
+        <!-- RASPA Y GANA -->
         <div class="card">
             <h2>🎁 Rasca tu Sorpresa de Hoy</h2>
             <div class="scratch-card" id="scratchCard" onclick="revealScratch()">
@@ -615,7 +612,7 @@
             </div>
         </div>
 
-        <!-- GENERADOR DE DESEOS PARA EL FUTURO -->
+        <!-- GENERADOR DE DESEOS -->
         <div class="card">
             <h2>✨ Generador de Deseos Juntos</h2>
             <div class="phrase-box">
@@ -633,7 +630,7 @@
             </div>
         </div>
 
-        <!-- LÍNEA DE TIEMPO DE NUESTRA HISTORIA -->
+        <!-- LÍNEA DE TIEMPO -->
         <div class="card">
             <h2>📖 Nuestra Historia de Amor</h2>
             <div class="timeline">
@@ -667,7 +664,7 @@
             </div>
         </div>
 
-        <!-- GENERADOR DE RAZONES DE AMOR -->
+        <!-- GENERADOR DE RAZONES -->
         <div class="card">
             <h2>💖 ¿Por qué eres tan especial para mí?</h2>
             <div class="phrase-box">
@@ -716,7 +713,7 @@
             </div>
         </div>
 
-        <!-- TRIVIA QUIZ -->
+        <!-- TRIVIA -->
         <div class="card">
             <h2>🎮 Trivia: ¿Qué tanto nos conocemos?</h2>
             <div class="quiz-box">
@@ -741,7 +738,7 @@
             </ul>
         </div>
 
-        <!-- CARTA MANUSCRITA -->
+        <!-- CARTA -->
         <div class="card">
             <h2>📜 Para Mi Julieth</h2>
             <div class="letter-container">
@@ -756,7 +753,7 @@
     </div>
 
     <script>
-        // LÓGICA DE ESCANEO DE HUELLA
+        // ESCANEO HUELLA
         let scanTimer = null;
         const laser = document.getElementById('laser');
         const lockText = document.getElementById('lockText');
@@ -779,13 +776,8 @@
                     lockScreen.classList.add('unlocked');
                     mainContainer.classList.add('show');
                     
-                    // REPRODUCCIÓN AUTOMÁTICA EN SEGUNDO PLANO AL 20% DE VOLUMEN
                     playAudioAuto();
-
-                    // NOTIFICACIONES
                     initAutoNotifications();
-
-                    // CARGAR MENSAJE DEL DÍA
                     loadDailyMessage();
                 }, 600);
             }, 1800);
@@ -804,18 +796,38 @@
             }
         }
 
-        // ENVIAR MENSAJE A WHATSAPP
-        function sendToWhatsApp() {
+        // FUNCIÓN DE NOTIFICACIÓN DIRECTA AL CELULAR DE JUNIOR
+        function sendDirectNotification() {
             const noteText = document.getElementById('juliethNote').value.trim();
             if (noteText === "") {
                 alert("Por favor escribe una notita antes de enviar ❤️");
                 return;
             }
-            const encodedText = encodeURIComponent("Hola mi amor ❤️ Te dejé esta notita desde la página web:\n\n\"" + noteText + "\"");
-            window.open("https://api.whatsapp.com/send?text=" + encodedText, "_blank");
+
+            // REEMPLAZA ESTE NOMBRE POR EL QUE CREASTE EN LA APP NTFY
+            const miCanalSecreto = "junior-julieth-amor-777";
+
+            fetch(`https://ntfy.sh/${miCanalSecreto}`, {
+                method: 'POST',
+                body: `Julieth te dejó esta notita desde la web:\n\n"${noteText}"`,
+                headers: {
+                    'Title': '💌 ¡Nueva Notita de Amor de Julieth!'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("¡Tu notita ha sido enviada con éxito a Junior! ❤️");
+                    document.getElementById('juliethNote').value = "";
+                } else {
+                    alert("Hubo un detalle al enviar el mensaje. Intenta de nuevo.");
+                }
+            })
+            .catch(error => {
+                alert("Error de conexión. Revisa tu internet.");
+            });
         }
 
-        // LÓGICA DEL DIARIO DE NUESTRO AMOR (MENSAJE POR DÍA DE LA SEMANA)
+        // DIARIO DE NUESTRO AMOR
         const dailyMessages = [
             { day: "Domingo ☀️", msg: "\"Cerrando la semana dando gracias por tenerte a mi lado. Te amo infinitamente.\"" },
             { day: "Lunes 💖", msg: "\"Iniciando la semana pensando en ti. Eres mi motor favorito para empezar con una sonrisa.\"" },
@@ -832,7 +844,7 @@
             document.getElementById('dailyMsg').innerText = dailyMessages[today].msg;
         }
 
-        // REPRODUCCIÓN EN SEGUNDO PLANO AL 20% (0.2 DE VOLUMEN)
+        // AUDIO AL 20%
         function playAudioAuto() {
             const music = document.getElementById('bgMusic');
             music.volume = 0.2;
@@ -841,7 +853,7 @@
             });
         }
 
-        // GENERADOR DE DESEOS FUTUROS
+        // DESEOS
         const wishes = [
             "Ir por un helado y caminar juntos riéndonos de cualquier tontería.",
             "Tener una tarde completa para ver películas abrazados sin ver el reloj.",
@@ -853,7 +865,7 @@
             document.getElementById('wishDisplay').innerText = `"${w}"`;
         }
 
-        // NOTIFICACIONES AUTOMÁTICAS
+        // NOTIFICACIONES
         function initAutoNotifications() {
             if ("Notification" in window) {
                 if (Notification.permission === "granted") {
@@ -912,13 +924,13 @@
             }, 60000);
         }
 
-        // REVELAR SORPRESA RASPA Y GANA
+        // RASPA Y GANA
         function revealScratch() {
             document.getElementById('scratchCover').style.display = 'none';
             document.getElementById('scratchContent').style.display = 'block';
         }
 
-        // IDIOMAS DE TE AMO
+        // IDIOMAS
         const langs = [
             "\"Je t'aime\" (Francés 🇫🇷)",
             "\"Ti amo\" (Italiano 🇮🇹)",
@@ -935,7 +947,7 @@
             document.getElementById('langDisplay').innerText = langs[langIdx];
         }
 
-        // REVELAR NOTA ESPECIAL
+        // NOTA ESPECIAL
         function toggleSpecialSecret() {
             const secret = document.getElementById('specialSecret');
             secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
@@ -956,7 +968,7 @@
         setInterval(updateCounter, 1000); 
         updateCounter();
 
-        // GENERADOR DE RAZONES DE AMOR
+        // RAZONES
         const reasons = [
             "Porque con solo ver una notificación tuya se me ilumina el día.",
             "Porque me encanta cómo nos entendemos y nos reímos de todo.",
@@ -971,13 +983,13 @@
             document.getElementById('reasonDisplay').innerText = `"${r}"`;
         }
 
-        // CANDADO DE PROMESAS
+        // CANDADO
         function unlockSecret() {
             document.getElementById('lockIcon').innerText = '🔓';
             document.getElementById('lockSecret').style.display = 'block';
         }
 
-        // TRIVIA QUIZ
+        // TRIVIA
         function answerQuiz(optionText) {
             document.getElementById('quizResult').innerText = "¡Totalmente! " + optionText + " 💕";
         }
@@ -991,7 +1003,7 @@
             document.getElementById('progressFill').style.width = pct + '%';
         }
 
-        // SOBRES SECRETOS
+        // SOBRES
         function toggleEnvelope(card) {
             const text = card.querySelector('.envelope-text');
             const isVisible = text.style.display === 'block';
@@ -999,7 +1011,7 @@
             card.querySelector('.envelope-icon').innerText = isVisible ? '✉️' : '📩';
         }
 
-        // EFECTO CORAZONES AL HACER CLIC
+        // CORAZONES
         document.addEventListener('click', (e) => {
             spawnHeart(e.clientX, e.clientY);
         });
@@ -1014,7 +1026,7 @@
             setTimeout(() => heart.remove(), 1200);
         }
 
-        // PARTICULAS DE FONDO
+        // PARTÍCULAS
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
