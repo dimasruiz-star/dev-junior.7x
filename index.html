@@ -804,24 +804,34 @@ function sendDirectNotification() {
         return;
     }
 
-    // REEMPLAZA CON EL NOMBRE DE TU CANAL EN NTFY
+ // ENVIAR NOTIFICACIÓN DIRECTA A NTFY (SOLUCIÓN DEFINITIVA A PRUEBA DE CORS)
+function sendDirectNotification() {
+    const noteText = document.getElementById('juliethNote').value.trim();
+    if (noteText === "") {
+        alert("Por favor escribe una notita antes de enviar ❤️");
+        return;
+    }
+
+    // COLOCA AQUÍ TU CANAL DE NTFY
     const miCanalSecreto = "junior-julieth-amor-777";
 
-    fetch(`https://ntfy.sh/${miCanalSecreto}`, {
-        method: 'POST',
-        body: `Julieth te dejó esta notita:\n\n"${noteText}"`,
-        headers: {
-            'Title': '💌 ¡Nueva Notita de Amor de Julieth!'
-        },
-        mode: 'no-cors'
-    })
-    .then(() => {
-        alert("¡Tu notita ha sido enviada con éxito a Junior! ❤️");
-        document.getElementById('juliethNote').value = "";
-    })
-    .catch(error => {
-        alert("Hubo un problema de red al enviar. Revisa tu internet.");
-    });
+    // Enviamos el mensaje directamente en la URL para evitar bloqueos del navegador
+    const mensajeFormateado = encodeURIComponent(`Julieth te dejó esta notita:\n\n"${noteText}"`);
+    const tituloFormateado = encodeURIComponent('💌 ¡Nueva Notita de Amor de Julieth!');
+    
+    const url = `https://ntfy.sh/${miCanalSecreto}/publish?message=${mensajeFormateado}&title=${tituloFormateado}`;
+
+    // Usamos navigator.sendBeacon o Image para enviar los datos sin restricción de CORS
+    if (navigator.sendBeacon) {
+        navigator.sendBeacon(url);
+    } else {
+        const img = new Image();
+        img.src = url;
+    }
+
+    // Confirmación al usuario al instante
+    alert("¡Tu notita ha sido enviada con éxito a Junior! ❤️");
+    document.getElementById('juliethNote').value = "";
 }
 
         // DIARIO DE NUESTRO AMOR
