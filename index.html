@@ -225,6 +225,64 @@
             line-height: 1.7;
         }
 
+        /* CONTADOR DE ABRAZOS */
+        .hug-box {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px dashed var(--secondary);
+        }
+
+        .hug-count {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 10px 0;
+            text-shadow: 0 0 15px rgba(255, 117, 140, 0.5);
+        }
+
+        /* LÍNEA DE TIEMPO */
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+            padding-left: 20px;
+            border-left: 2px dashed var(--secondary);
+        }
+
+        .timeline-item {
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .timeline-item::before {
+            content: '💖';
+            position: absolute;
+            left: -32px;
+            top: 0;
+            font-size: 1.2rem;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .timeline-title {
+            font-size: 1.1rem;
+            color: #ffffff;
+            font-weight: 600;
+            margin: 4px 0;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+        }
+
         /* ALBUM DE RECUERDOS */
         .gallery-grid {
             display: grid;
@@ -404,6 +462,38 @@
             </div>
         </div>
 
+        <!-- CONTADOR DE ABRAZOS VIRTUALES -->
+        <div class="card">
+            <h2>🤗 Nuestro Contador de Abrazos</h2>
+            <div class="hug-box">
+                <p style="color:var(--text-sub); font-size:0.95rem;">Toca el botón para enviarme un abrazo y acumularlo para cuando nos veamos:</p>
+                <div class="hug-count" id="hugCounter">0</div>
+                <button class="btn-magic" onclick="addHug()">🫂 ¡Enviar Abrazo!</button>
+            </div>
+        </div>
+
+        <!-- LÍNEA DE TIEMPO DE NUESTRA HISTORIA -->
+        <div class="card">
+            <h2>📖 Nuestra Historia de Amor</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">15 de Septiembre de 2025</div>
+                    <div class="timeline-title">El Comienzo de Algo Hermoso</div>
+                    <div class="timeline-desc">El día en que oficialmente empezó nuestra bonita historia y nuestros días se llenaron de sonrisas.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Todos los días</div>
+                    <div class="timeline-title">Nuestras Noches de Mensajes</div>
+                    <div class="timeline-desc">Compartir nuestro día a día, trasnochar platicando y ser el refugio del otro a la distancia.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Muy Pronto</div>
+                    <div class="timeline-title">El Abrazo Tan Esperado</div>
+                    <div class="timeline-desc">El momento en que por fin estemos frente a frente para no soltarnos jamás.</div>
+                </div>
+            </div>
+        </div>
+
         <!-- CONTADOR DE TIEMPO -->
         <div class="card">
             <h2>⏳ Tiempo Escribiendo Nuestro Amor</h2>
@@ -567,6 +657,13 @@
         function toggleSpecialSecret() {
             const secret = document.getElementById('specialSecret');
             secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // CONTADOR DE ABRAZOS
+        let hugCount = 0;
+        function addHug() {
+            hugCount++;
+            document.getElementById('hugCounter').innerText = hugCount;
         }
 
         // CONTADOR DE TIEMPO
