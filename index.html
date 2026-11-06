@@ -184,7 +184,7 @@
             text-shadow: 0 0 12px rgba(255, 42, 109, 0.4);
         }
 
-        /* TARJETA ESPECIAL DE JUNIOR */
+        /* DEDICATORIA ESPECIAL */
         .special-badge {
             background: rgba(255, 42, 109, 0.08);
             border: 1px solid var(--secondary);
@@ -223,6 +223,15 @@
             font-style: italic;
             font-size: 1.05rem;
             line-height: 1.7;
+        }
+
+        /* NOTIFICACIONES BOX */
+        .notif-box {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px dashed var(--secondary);
         }
 
         /* CONTADOR DE ABRAZOS */
@@ -283,51 +292,7 @@
             line-height: 1.5;
         }
 
-        /* ALBUM DE RECUERDOS */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .polaroid-card {
-            background: rgba(255, 255, 255, 0.07);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .polaroid-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(255, 42, 109, 0.3);
-        }
-
-        .polaroid-img-placeholder {
-            width: 100%;
-            height: 180px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3.5rem;
-            margin-bottom: 12px;
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-        }
-
-        .polaroid-caption {
-            font-size: 1rem;
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        /* CONTADOR */
+        /* CONTADOR DE TIEMPO */
         .counter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 15px; margin-top: 15px; }
         .counter-box {
             background: rgba(255, 255, 255, 0.04);
@@ -462,6 +427,19 @@
             </div>
         </div>
 
+        <!-- MENSANJES EN EL CELULAR (NOTIFICACIONES) -->
+        <div class="card">
+            <h2>🔔 Mensajes Diarios en tu Celular</h2>
+            <div class="notif-box">
+                <p style="color:var(--text-sub); font-size:0.95rem; margin-bottom:15px;">
+                    Activa las notificaciones para que recibas un mensaje de amor automático a ciertas horas del día en la pantalla de tu celular:
+                </p>
+                <button class="btn-magic" onclick="requestNotificationPermission()">📲 Recibir Notificaciones de Amor</button>
+                <button class="btn-magic" style="margin-top:10px; background:rgba(255,255,255,0.1);" onclick="sendTestNotification()">⚡ Probar Notificación Ahora</button>
+                <p id="notifStatus" style="font-size:0.85rem; color:var(--accent); margin-top:10px;"></p>
+            </div>
+        </div>
+
         <!-- CONTADOR DE ABRAZOS VIRTUALES -->
         <div class="card">
             <h2>🤗 Nuestro Contador de Abrazos</h2>
@@ -503,25 +481,6 @@
                 <div class="counter-box"><span id="hours">0</span><label>Horas</label></div>
                 <div class="counter-box"><span id="minutes">0</span><label>Minutos</label></div>
                 <div class="counter-box"><span id="seconds">0</span><label>Segundos</label></div>
-            </div>
-        </div>
-
-        <!-- ÁLBUM DE RECUERDOS -->
-        <div class="card">
-            <h2>📸 Nuestros Momentos Especiales</h2>
-            <div class="gallery-grid">
-                <div class="polaroid-card">
-                    <div class="polaroid-img-placeholder">💬</div>
-                    <div class="polaroid-caption">Nuestra Primera Charla</div>
-                </div>
-                <div class="polaroid-card">
-                    <div class="polaroid-img-placeholder">🌙</div>
-                    <div class="polaroid-caption">Las Noches de Mensajes</div>
-                </div>
-                <div class="polaroid-card">
-                    <div class="polaroid-img-placeholder">🎁</div>
-                    <div class="polaroid-caption">Detalles Inolvidables</div>
-                </div>
             </div>
         </div>
 
@@ -636,6 +595,7 @@
                 setTimeout(() => {
                     lockScreen.classList.add('unlocked');
                     mainContainer.classList.add('show');
+                    scheduleDailyNotifications();
                 }, 600);
             }, 1800);
         }
@@ -657,6 +617,54 @@
         function toggleSpecialSecret() {
             const secret = document.getElementById('specialSecret');
             secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // SISTEMA DE NOTIFICACIONES DE AMOR
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) {
+                document.getElementById('notifStatus').innerText = "Tu navegador no soporta notificaciones automáticas.";
+                return;
+            }
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    document.getElementById('notifStatus').innerText = "¡Notificaciones activadas! Te llegarán mensajes de amor cada día. 💕";
+                    sendTestNotification();
+                } else {
+                    document.getElementById('notifStatus').innerText = "Permiso denegado. Puedes activarlo desde la configuración del navegador.";
+                }
+            });
+        }
+
+        function sendTestNotification() {
+            if (Notification.permission === "granted") {
+                new Notification("Mensaje de Junior ❤️", {
+                    body: "¡Hola mi amor! Solo pasaba a recordarte lo mucho que te amo y lo especial que eres para mí. 🥰",
+                    icon: "https://cdn-icons-png.flaticon.com/512/2589/2589175.png"
+                });
+            } else {
+                requestNotificationPermission();
+            }
+        }
+
+        function scheduleDailyNotifications() {
+            if (Notification.permission === "granted") {
+                // Comprueba cada minuto si es la hora configurada (ejemplo: 9:00 AM, 3:00 PM, 9:00 PM)
+                setInterval(() => {
+                    const now = new Date();
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+
+                    if (minutes === 0) {
+                        if (hours === 9) {
+                            new Notification("Buenos días mi amor ☀️", { body: "Espero que tengas un día maravilloso. Te amo infinitamente. ❤️" });
+                        } else if (hours === 15) {
+                            new Notification("Paso a saludarte 💕", { body: "Espero que tu día vaya súper bien. Recuerda que siempre pienso en ti. ✨" });
+                        } else if (hours === 21) {
+                            new Notification("Buenas noches, hermosa 🌙", { body: "Que descanses y tengas los sueños más bonitos. Te envío un abrazo fuerte." });
+                        }
+                    }
+                }, 60000);
+            }
         }
 
         // CONTADOR DE ABRAZOS
