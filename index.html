@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Para ti, mi amor ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&family=Great+Vibes&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #ff2a6d;
@@ -184,6 +184,84 @@
             text-shadow: 0 0 12px rgba(255, 42, 109, 0.4);
         }
 
+        /* DESARROLLADOR CARD */
+        .dev-badge {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dev-badge:hover {
+            box-shadow: 0 0 30px rgba(255, 42, 109, 0.4);
+            transform: scale(1.02);
+        }
+
+        .dev-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+
+        .dev-desc {
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+
+        .dev-secret {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 42, 109, 0.15);
+            border-radius: 12px;
+            color: #ffffff;
+            font-style: italic;
+        }
+
+        /* TERMINAL INTERACTIVA DE AMOR */
+        .terminal-box {
+            background: #0d0614;
+            border: 1px solid rgba(255, 117, 140, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #20c997;
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .terminal-header {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .terminal-output {
+            min-height: 60px;
+            color: #ffccd5;
+            margin-bottom: 15px;
+        }
+
+        .terminal-btn {
+            background: rgba(255, 42, 109, 0.2);
+            border: 1px solid var(--primary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            cursor: pointer;
+            margin: 4px;
+            font-size: 0.85rem;
+        }
+
+        .terminal-btn:hover { background: var(--primary); }
+
         /* ALBUM DE RECUERDOS */
         .gallery-grid {
             display: grid;
@@ -250,7 +328,7 @@
             border-radius: 16px; margin-top: 15px; font-size: 1.05rem; line-height: 1.6;
         }
 
-        /* GENERADOR DE FRASES Y RAZONES */
+        /* GENERADOR DE FRASES */
         .phrase-box {
             background: rgba(255, 255, 255, 0.04); border: 1px dashed var(--secondary);
             padding: 25px; border-radius: 20px; text-align: center;
@@ -349,6 +427,33 @@
             <p>Escribiendo nuestro amor día a día ✨</p>
             <div class="badge-tag">🌹 Nuestra historia juntos desde el 15.09.2025</div>
         </header>
+
+        <!-- SECCIÓN DEVELOPER (JUNIOR) -->
+        <div class="card">
+            <h2>💻 Créditos del Desarrollador</h2>
+            <div class="dev-badge" onclick="toggleDevSecret()">
+                <div class="dev-title">&lt;Developer: Junior /&gt;</div>
+                <div class="dev-desc">Página diseñada y programada línea por línea exclusivamente para Julieth ❤️</div>
+                <p style="font-size:0.8rem; color:var(--primary); margin-top:8px;">[ Toca aquí para ver la nota del programador ]</p>
+                <div class="dev-secret" id="devSecret">
+                    "Diseñé este código pensando en cada detalle tuyo. No hay servidor ni algoritmo que mida lo mucho que me importas. Gracias por ser mi inspiración diaria." 🚀✨
+                </div>
+            </div>
+        </div>
+
+        <!-- TERMINAL DE COMANDOS DE AMOR -->
+        <div class="card">
+            <h2>⌨️ Consola de Amor de Junior</h2>
+            <div class="terminal-box">
+                <div class="terminal-header">&gt; junior_system_love.exe v2.0</div>
+                <div class="terminal-output" id="terminalOut">Selecciona un comando para ejecutar en la consola...</div>
+                <div>
+                    <button class="terminal-btn" onclick="runCmd('ejecutar_amor.exe')">./ejecutar_amor.exe</button>
+                    <button class="terminal-btn" onclick="runCmd('verificar_destino.js')">./verificar_destino.js</button>
+                    <button class="terminal-btn" onclick="runCmd('ping_corazon.sh')">./ping_corazon.sh</button>
+                </div>
+            </div>
+        </div>
 
         <!-- CONTADOR DE TIEMPO -->
         <div class="card">
@@ -464,7 +569,7 @@
         </div>
 
         <footer>
-            Creado para Julieth ❤️
+            Desarrollado con ❤️ por Junior para Julieth
         </footer>
 
     </div>
@@ -506,6 +611,24 @@
                 fpSvg.style.stroke = '#ffffff';
                 lockText.innerText = "Mantén presionada la huella ♥";
                 lockText.style.color = "var(--text-sub)";
+            }
+        }
+
+        // DESARROLLADOR SECRET
+        function toggleDevSecret() {
+            const secret = document.getElementById('devSecret');
+            secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // TERMINAL DE COMANDOS
+        function runCmd(cmd) {
+            const out = document.getElementById('terminalOut');
+            if(cmd === 'ejecutar_amor.exe') {
+                out.innerHTML = "&gt; Ejecutando amor infinito hacia Julieth...<br>&gt; Resultado: 100% de coincidencia amorosa. ❤️";
+            } else if(cmd === 'verificar_destino.js') {
+                out.innerHTML = "&gt; Verificando línea temporal...<br>&gt; Resultado: Junior & Julieth están destinados a estar juntos. ✨";
+            } else if(cmd === 'ping_corazon.sh') {
+                out.innerHTML = "&gt; Enviando latido a Julieth...<br>&gt; Respuesta recibida en 1ms: ¡Te quiero muchísimo! 🥰";
             }
         }
 
