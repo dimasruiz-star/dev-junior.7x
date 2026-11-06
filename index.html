@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Para ti, mi amor ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
@@ -28,11 +28,13 @@
             flex-direction: column;
             align-items: center;
             overflow-x: hidden;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 
-        /* --- PANTALLA DE BLOQUEO ESTILO FOTO --- */
+        /* --- PANTALLA DE BLOQUEO DE HUELLA --- */
         #lock-screen {
             position: fixed;
             top: 0; left: 0;
@@ -56,66 +58,72 @@
 
         .lock-title {
             font-family: 'Great Vibes', 'Dancing Script', cursive;
-            font-size: 4.5rem;
+            font-size: 4.8rem;
             color: #ffffff;
-            margin-bottom: 40px;
-            text-shadow: 0 0 20px rgba(255, 117, 140, 0.6);
+            margin-bottom: 35px;
+            text-shadow: 0 0 25px rgba(255, 117, 140, 0.8);
             letter-spacing: 1px;
         }
 
         .fingerprint-wrapper {
             position: relative;
-            width: 160px;
-            height: 160px;
+            width: 170px;
+            height: 170px;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.45);
+            border: 2px solid rgba(255, 117, 140, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 0 40px rgba(255, 42, 109, 0.25);
-            user-select: none;
+            box-shadow: 0 0 45px rgba(255, 42, 109, 0.3);
             -webkit-tap-highlight-color: transparent;
         }
 
-        .fingerprint-wrapper:hover {
-            box-shadow: 0 0 50px rgba(255, 42, 109, 0.5);
+        .fingerprint-wrapper::before {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            opacity: 0;
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.3); opacity: 0; }
         }
 
         .fingerprint-svg {
-            width: 90px;
-            height: 90px;
+            width: 95px;
+            height: 95px;
             fill: none;
             stroke: #ffffff;
             stroke-width: 4;
             stroke-linecap: round;
-            opacity: 0.9;
+            opacity: 0.95;
             transition: stroke 0.3s ease, transform 0.3s ease;
-        }
-
-        .fingerprint-wrapper:active .fingerprint-svg {
-            transform: scale(0.95);
         }
 
         .scan-laser {
             position: absolute;
             top: 0; left: 0;
-            width: 100%; height: 3px;
+            width: 100%; height: 4px;
             background: linear-gradient(90deg, transparent, #ff2a6d, #ffffff, #ff2a6d, transparent);
-            box-shadow: 0 0 15px #ff2a6d;
+            box-shadow: 0 0 20px #ff2a6d;
             opacity: 0;
             border-radius: 2px;
         }
 
         @keyframes scanAnim {
-            0% { top: 15%; opacity: 1; }
-            50% { top: 85%; opacity: 1; }
-            100% { top: 15%; opacity: 1; }
+            0% { top: 12%; opacity: 1; }
+            50% { top: 88%; opacity: 1; }
+            100% { top: 12%; opacity: 1; }
         }
 
         .lock-subtitle {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: var(--text-sub);
             margin-top: 45px;
             font-weight: 300;
@@ -140,14 +148,14 @@
         
         header h1 {
             font-family: 'Dancing Script', cursive;
-            font-size: 5.2rem;
+            font-size: 5.5rem;
             background: linear-gradient(45deg, #ff4b72, #ff85a1, #ffffff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0 0 25px rgba(255, 42, 109, 0.6));
         }
 
-        header p { font-size: 1.25rem; color: var(--text-sub); margin-top: 8px; font-weight: 300; }
+        header p { font-size: 1.3rem; color: var(--text-sub); margin-top: 8px; font-weight: 300; }
 
         .badge-tag {
             display: inline-block;
@@ -176,7 +184,51 @@
             text-shadow: 0 0 12px rgba(255, 42, 109, 0.4);
         }
 
-        /* Contador */
+        /* ALBUM DE RECUERDOS */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .polaroid-card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .polaroid-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(255, 42, 109, 0.3);
+        }
+
+        .polaroid-img-placeholder {
+            width: 100%;
+            height: 180px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin-bottom: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .polaroid-caption {
+            font-size: 1rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        /* CONTADOR */
         .counter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); gap: 15px; margin-top: 15px; }
         .counter-box {
             background: rgba(255, 255, 255, 0.04);
@@ -186,7 +238,7 @@
         .counter-box span { display: block; font-size: 2.3rem; font-weight: 700; color: var(--secondary); }
         .counter-box label { font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; }
 
-        /* Lock Box */
+        /* CANDADO DE PROMESAS */
         .lock-container {
             text-align: center; background: rgba(0, 0, 0, 0.3);
             border-radius: 20px; padding: 25px; border: 1px solid rgba(255, 255, 255, 0.1);
@@ -198,7 +250,7 @@
             border-radius: 16px; margin-top: 15px; font-size: 1.05rem; line-height: 1.6;
         }
 
-        /* Phrase Generator */
+        /* GENERADOR DE FRASES Y RAZONES */
         .phrase-box {
             background: rgba(255, 255, 255, 0.04); border: 1px dashed var(--secondary);
             padding: 25px; border-radius: 20px; text-align: center;
@@ -215,7 +267,7 @@
         }
         .btn-magic:hover { transform: scale(1.05); }
 
-        /* Quiz */
+        /* QUIZ */
         .quiz-box { background: rgba(255, 255, 255, 0.04); border-radius: 20px; padding: 20px; text-align: center; }
         .quiz-btn {
             background: rgba(255, 255, 255, 0.08); border: 1px solid var(--secondary);
@@ -224,7 +276,7 @@
         }
         .quiz-btn:hover { background: var(--primary); }
 
-        /* Bucket List */
+        /* BUCKET LIST */
         .bucket-list { list-style: none; }
         .bucket-list li {
             background: rgba(255, 255, 255, 0.04); margin-bottom: 12px;
@@ -236,7 +288,7 @@
         .progress-bar-bg { background: rgba(255, 255, 255, 0.1); height: 10px; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
         .progress-bar-fill { background: linear-gradient(90deg, var(--primary), var(--secondary)); height: 100%; width: 0%; transition: width 0.4s ease; }
 
-        /* Envelopes */
+        /* SOBRES SECRETOS */
         .envelope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         .envelope-card { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; text-align: center; cursor: pointer; }
         .envelope-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.1); border-color: var(--primary); }
@@ -244,7 +296,7 @@
         .envelope-title { font-weight: 600; color: var(--accent); }
         .envelope-text { display: none; margin-top: 12px; font-size: 0.9rem; color: #ffffff; background: rgba(255, 42, 109, 0.2); padding: 12px; border-radius: 12px; }
 
-        /* Letter */
+        /* CARTA */
         .letter-container {
             background: rgba(255, 255, 255, 0.04);
             border-left: 4px solid var(--primary);
@@ -271,7 +323,7 @@
 
     <canvas id="canvas-bg"></canvas>
 
-    <!-- PANTALLA DE INICIO CON HUELLA -->
+    <!-- PANTALLA DE INICIO CON HUELLA DACTILAR -->
     <div id="lock-screen">
         <h1 class="lock-title">Para ti, mi amor</h1>
         <div class="fingerprint-wrapper" id="fpWrap" onmousedown="startScan()" onmouseup="stopScan()" onmouseleave="stopScan()" ontouchstart="startScan()" ontouchend="stopScan()">
@@ -289,7 +341,7 @@
         <p class="lock-subtitle" id="lockText">Mantén presionada la huella ♥</p>
     </div>
 
-    <!-- CONTENIDO DE LA PÁGINA WEB -->
+    <!-- CONTENIDO PRINCIPAL -->
     <div class="container" id="mainContainer">
         
         <header>
@@ -298,7 +350,7 @@
             <div class="badge-tag">🌹 Nuestra historia juntos desde el 15.09.2025</div>
         </header>
 
-        <!-- Contador Juntos -->
+        <!-- CONTADOR DE TIEMPO -->
         <div class="card">
             <h2>⏳ Tiempo Escribiendo Nuestro Amor</h2>
             <p style="text-align:center; color:var(--text-sub); font-size:0.95rem; margin-bottom:10px;">Desde aquel 15 de septiembre de 2025:</p>
@@ -310,16 +362,63 @@
             </div>
         </div>
 
-        <!-- Generador de Frases -->
+        <!-- ÁLBUM DE RECUERDOS -->
         <div class="card">
-            <h2>✨ Un Mensaje Especial para Hoy</h2>
-            <div class="phrase-box">
-                <div class="phrase-text" id="phraseDisplay">"Cada día a tu lado y en cada mensaje me doy cuenta de lo afortunado que soy..."</div>
-                <button class="btn-magic" onclick="generatePhrase()">💖 Descubrir Mensaje</button>
+            <h2>📸 Nuestros Momentos Especiales</h2>
+            <div class="gallery-grid">
+                <div class="polaroid-card">
+                    <div class="polaroid-img-placeholder">💬</div>
+                    <div class="polaroid-caption">Nuestra Primera Charla</div>
+                </div>
+                <div class="polaroid-card">
+                    <div class="polaroid-img-placeholder">🌙</div>
+                    <div class="polaroid-caption">Las Noches de Mensajes</div>
+                </div>
+                <div class="polaroid-card">
+                    <div class="polaroid-img-placeholder">🎁</div>
+                    <div class="polaroid-caption">Detalles Inolvidables</div>
+                </div>
             </div>
         </div>
 
-        <!-- El Candado del Amor -->
+        <!-- GENERADOR DE RAZONES POR LAS QUE TE AMO -->
+        <div class="card">
+            <h2>💖 ¿Por qué eres tan especial para mí?</h2>
+            <div class="phrase-box">
+                <div class="phrase-text" id="reasonDisplay">"Toca el botón para descubrir una razón de por qué te amo tanto..."</div>
+                <button class="btn-magic" onclick="generateReason()">✨ Descubrir Razón</button>
+            </div>
+        </div>
+
+        <!-- CARTAS ABRIR CUANDO... -->
+        <div class="card">
+            <h2>💌 Cartas "Abrir Cuando..."</h2>
+            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">Haz clic en cada sobre cuando lo necesites:</p>
+            <div class="envelope-grid">
+                <div class="envelope-card" onclick="toggleEnvelope(this)">
+                    <div class="envelope-icon">🥺</div>
+                    <div class="envelope-title">Cuando me extrañes</div>
+                    <div class="envelope-text">Recuerda que estoy a solo un mensaje de distancia y que mi corazón siempre está pensando en ti. ❤️</div>
+                </div>
+                <div class="envelope-card" onclick="toggleEnvelope(this)">
+                    <div class="envelope-icon">😔</div>
+                    <div class="envelope-title">Cuando tengas un mal día</div>
+                    <div class="envelope-text">Toma un respiro profundo. Eres una persona maravillosa y fuerte. Yo siempre estaré aquí para apoyarte. 🌹</div>
+                </div>
+                <div class="envelope-card" onclick="toggleEnvelope(this)">
+                    <div class="envelope-icon">🌙</div>
+                    <div class="envelope-title">Cuando no puedas dormir</div>
+                    <div class="envelope-text">Cierra los ojos y piensa en todos los abrazos y momentos bonitos que nos esperan juntos. Dulces sueños. ✨</div>
+                </div>
+                <div class="envelope-card" onclick="toggleEnvelope(this)">
+                    <div class="envelope-icon">🥰</div>
+                    <div class="envelope-title">Cuando quieras sonreír</div>
+                    <div class="envelope-text">Eres la persona que más sonrisas me saca al día, ¡así que hoy me toca a mí sacarte una a ti! 💕</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CANDADO DEL AMOR -->
         <div class="card">
             <h2>🔒 El Candado de Promesas de Junior & Julieth</h2>
             <div class="lock-container">
@@ -331,7 +430,7 @@
             </div>
         </div>
 
-        <!-- Mini Trivia Quiz -->
+        <!-- TRIVIA QUIZ -->
         <div class="card">
             <h2>🎮 Trivia: ¿Qué tanto nos conocemos?</h2>
             <div class="quiz-box">
@@ -343,7 +442,7 @@
             </div>
         </div>
 
-        <!-- Bucket List para el Primer Día -->
+        <!-- BUCKET LIST -->
         <div class="card">
             <h2>✨ Lista para Nuestro Primer Día Juntos</h2>
             <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;">Marcaremos juntos cada logro:</p>
@@ -356,35 +455,7 @@
             </ul>
         </div>
 
-        <!-- Sobres Secretos -->
-        <div class="card">
-            <h2>💌 Sobres de Mensajes Secretos</h2>
-            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:20px;">Toca cada sobre para abrir la nota secreta:</p>
-            <div class="envelope-grid">
-                <div class="envelope-card" onclick="toggleEnvelope(this)">
-                    <div class="envelope-icon">✉️</div>
-                    <div class="envelope-title">Nota #1</div>
-                    <div class="envelope-text">Ver una notificación con tu nombre siempre me arregla el día al instante. ❤️</div>
-                </div>
-                <div class="envelope-card" onclick="toggleEnvelope(this)">
-                    <div class="envelope-icon">💌</div>
-                    <div class="envelope-title">Nota #2</div>
-                    <div class="envelope-text">Me encanta quedarnos escribiéndonos hasta tarde en la noche. ✨</div>
-                </div>
-                <div class="envelope-card" onclick="toggleEnvelope(this)">
-                    <div class="envelope-icon">🎁</div>
-                    <div class="envelope-title">Nota #3</div>
-                    <div class="envelope-text">Tenerte en mi vida es lo mejor que me ha pasado. 🌹</div>
-                </div>
-                <div class="envelope-card" onclick="toggleEnvelope(this)">
-                    <div class="envelope-icon">💖</div>
-                    <div class="envelope-title">Nota #4</div>
-                    <div class="envelope-text">No importa la distancia, mi corazón es 100% tuyo. 🥰</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Carta Manuscrita -->
+        <!-- CARTA MANUSCRITA -->
         <div class="card">
             <h2>📜 Para Mi Julieth</h2>
             <div class="letter-container">
@@ -393,13 +464,13 @@
         </div>
 
         <footer>
-            Creado con todo el amor de Junior para Julieth ❤️
+            Creado para Julieth ❤️
         </footer>
 
     </div>
 
     <script>
-        // LÓGICA DE ESCANEO AL MANTENER PRESIONADO
+        // LÓGICA DE ESCANEO DE HUELLA
         let scanTimer = null;
         const laser = document.getElementById('laser');
         const lockText = document.getElementById('lockText');
@@ -438,7 +509,7 @@
             }
         }
 
-        // Contador desde Septiembre 15, 2025
+        // CONTADOR DE TIEMPO
         const startDate = new Date(2025, 8, 15, 0, 0, 0).getTime();
         function updateCounter() {
             const now = new Date().getTime();
@@ -453,31 +524,33 @@
         setInterval(updateCounter, 1000); 
         updateCounter();
 
-        // Lock Secret
+        // GENERADOR DE RAZONES DE AMOR
+        const reasons = [
+            "Porque con solo ver una notificación tuya se me ilumina el día.",
+            "Porque me encanta cómo nos entendemos y nos reímos de todo.",
+            "Porque haces que los días ordinarios se sientan especiales.",
+            "Porque admiro tu forma de ser y la ternura de tus mensajes.",
+            "Porque a tu lado siento una paz y una felicidad incomparables.",
+            "Porque eres mi persona favorita para hablar antes de dormir.",
+            "Porque me haces querer ser mejor persona cada día."
+        ];
+        function generateReason() {
+            const r = reasons[Math.floor(Math.random() * reasons.length)];
+            document.getElementById('reasonDisplay').innerText = `"${r}"`;
+        }
+
+        // CANDADO DE PROMESAS
         function unlockSecret() {
             document.getElementById('lockIcon').innerText = '🔓';
             document.getElementById('lockSecret').style.display = 'block';
         }
 
-        // Phrase Generator
-        const phrases = [
-            "Cada mensaje tuyo me saca una sonrisa sin importar el día que tenga.",
-            "Contigo aprendí que el amor no se mide en kilómetros, sino en detalles.",
-            "Me encanta descubrir cosas nuevas de ti cada día que nos escribimos.",
-            "No veo la hora de que el tiempo pase para poder darte ese abrazo.",
-            "Eres lo primero en lo que pienso al despertar y lo último antes de dormir."
-        ];
-        function generatePhrase() {
-            const p = phrases[Math.floor(Math.random() * phrases.length)];
-            document.getElementById('phraseDisplay').innerText = `"${p}"`;
-        }
-
-        // Quiz Result
+        // TRIVIA QUIZ
         function answerQuiz(optionText) {
             document.getElementById('quizResult').innerText = "¡Totalmente! " + optionText + " 💕";
         }
 
-        // Bucket List Progress
+        // BUCKET LIST
         function updateProgress() {
             const boxes = document.querySelectorAll('.bucket-list input');
             let checked = 0;
@@ -486,7 +559,7 @@
             document.getElementById('progressFill').style.width = pct + '%';
         }
 
-        // Envelopes Toggle
+        // SOBRES SECRETOS
         function toggleEnvelope(card) {
             const text = card.querySelector('.envelope-text');
             const isVisible = text.style.display === 'block';
@@ -494,7 +567,7 @@
             card.querySelector('.envelope-icon').innerText = isVisible ? '✉️' : '📩';
         }
 
-        // Click Heart Effect
+        // EFECTO CORAZONES AL HACER CLIC
         document.addEventListener('click', (e) => {
             spawnHeart(e.clientX, e.clientY);
         });
@@ -509,7 +582,7 @@
             setTimeout(() => heart.remove(), 1200);
         }
 
-        // Background Particles
+        // PARTICULAS DE FONDO
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
