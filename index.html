@@ -308,32 +308,6 @@
             font-weight: bold;
         }
 
-        /* BUZÓN DE MENSAJES CON NOTIFICACIÓN */
-        .message-box-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .message-textarea {
-            width: 100%;
-            height: 120px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--secondary);
-            border-radius: 18px;
-            padding: 15px;
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
-            font-size: 1rem;
-            resize: none;
-            outline: none;
-        }
-
-        .message-textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(255, 42, 109, 0.3);
-        }
-
         /* TARJETA RASPA Y GANA */
         .scratch-card {
             background: rgba(0, 0, 0, 0.4);
@@ -589,18 +563,6 @@
             </div>
         </div>
 
-        <!-- BUZÓN DE MENSAJES (ENVÍA NOTIFICACIÓN PUSH DIRECTA A TU CELULAR) -->
-        <div class="card">
-            <h2>💌 Deja una Nota para Junior</h2>
-            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;">Escribe una notita y me llegará una notificación al instante:</p>
-            <div class="message-box-container">
-                <textarea class="message-textarea" id="juliethNote" placeholder="Escribe aquí tu mensaje o respuesta con amor, mi vida... ❤️"></textarea>
-                <div style="text-align:center;">
-                    <button class="btn-magic" onclick="sendDirectNotification()">💖 Enviar Notita a Junior</button>
-                </div>
-            </div>
-        </div>
-
         <!-- RASPA Y GANA -->
         <div class="card">
             <h2>🎁 Rasca tu Sorpresa de Hoy</h2>
@@ -795,44 +757,6 @@
                 lockText.style.color = "var(--text-sub)";
             }
         }
-
-        // ENVIAR NOTIFICACIÓN DIRECTA AL CELULAR DE JUNIOR (VERSIÓN CORREGIDA)
-function sendDirectNotification() {
-    const noteText = document.getElementById('juliethNote').value.trim();
-    if (noteText === "") {
-        alert("Por favor escribe una notita antes de enviar ❤️");
-        return;
-    }
-
- // ENVIAR NOTIFICACIÓN DIRECTA A NTFY (SOLUCIÓN DEFINITIVA A PRUEBA DE CORS)
-function sendDirectNotification() {
-    const noteText = document.getElementById('juliethNote').value.trim();
-    if (noteText === "") {
-        alert("Por favor escribe una notita antes de enviar ❤️");
-        return;
-    }
-
-    // COLOCA AQUÍ TU CANAL DE NTFY
-    const miCanalSecreto = "junior-julieth-amor-777";
-
-    // Enviamos el mensaje directamente en la URL para evitar bloqueos del navegador
-    const mensajeFormateado = encodeURIComponent(`Julieth te dejó esta notita:\n\n"${noteText}"`);
-    const tituloFormateado = encodeURIComponent('💌 ¡Nueva Notita de Amor de Julieth!');
-    
-    const url = `https://ntfy.sh/${miCanalSecreto}/publish?message=${mensajeFormateado}&title=${tituloFormateado}`;
-
-    // Usamos navigator.sendBeacon o Image para enviar los datos sin restricción de CORS
-    if (navigator.sendBeacon) {
-        navigator.sendBeacon(url);
-    } else {
-        const img = new Image();
-        img.src = url;
-    }
-
-    // Confirmación al usuario al instante
-    alert("¡Tu notita ha sido enviada con éxito a Junior! ❤️");
-    document.getElementById('juliethNote').value = "";
-}
 
         // DIARIO DE NUESTRO AMOR
         const dailyMessages = [
