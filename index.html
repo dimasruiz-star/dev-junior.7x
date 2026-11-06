@@ -225,15 +225,6 @@
             line-height: 1.7;
         }
 
-        /* NOTIFICACIONES BOX */
-        .notif-box {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px dashed var(--secondary);
-        }
-
         /* CONTADOR DE ABRAZOS */
         .hug-box {
             text-align: center;
@@ -427,19 +418,6 @@
             </div>
         </div>
 
-        <!-- MENSANJES EN EL CELULAR (NOTIFICACIONES) -->
-        <div class="card">
-            <h2>🔔 Mensajes Diarios en tu Celular</h2>
-            <div class="notif-box">
-                <p style="color:var(--text-sub); font-size:0.95rem; margin-bottom:15px;">
-                    Activa las notificaciones para que recibas un mensaje de amor automático a ciertas horas del día en la pantalla de tu celular:
-                </p>
-                <button class="btn-magic" onclick="requestNotificationPermission()">📲 Recibir Notificaciones de Amor</button>
-                <button class="btn-magic" style="margin-top:10px; background:rgba(255,255,255,0.1);" onclick="sendTestNotification()">⚡ Probar Notificación Ahora</button>
-                <p id="notifStatus" style="font-size:0.85rem; color:var(--accent); margin-top:10px;"></p>
-            </div>
-        </div>
-
         <!-- CONTADOR DE ABRAZOS VIRTUALES -->
         <div class="card">
             <h2>🤗 Nuestro Contador de Abrazos</h2>
@@ -595,7 +573,8 @@
                 setTimeout(() => {
                     lockScreen.classList.add('unlocked');
                     mainContainer.classList.add('show');
-                    scheduleDailyNotifications();
+                    // ACTIVAR NOTIFICACIONES AUTOMÁTICAS AL DESBLOQUEAR
+                    initAutoNotifications();
                 }, 600);
             }, 1800);
         }
@@ -613,58 +592,54 @@
             }
         }
 
+        // ACTIVACIÓN AUTOMÁTICA DE NOTIFICACIONES
+        function initAutoNotifications() {
+            if ("Notification" in window) {
+                if (Notification.permission === "granted") {
+                    startScheduledNotifications();
+                } else if (Notification.permission !== "denied") {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === "granted") {
+                            // NOTIFICACIÓN BIENVENIDA INICIAL
+                            new Notification("Mensaje de Junior ❤️", {
+                                body: "¡Notificaciones de amor activadas! Te llegarán mensajes en el transcurso del día. 🥰"
+                            });
+                            startScheduledNotifications();
+                        }
+                    });
+                }
+            }
+        }
+
+        function startScheduledNotifications() {
+            // Revisa el reloj del teléfono cada minuto para enviar los mensajes en los horarios clave
+            setInterval(() => {
+                const now = new Date();
+                const hours = now.getHours();
+                const minutes = now.getMinutes();
+
+                if (minutes === 0) {
+                    if (hours === 8) {
+                        new Notification("Buenos días, mi amor ☀️", { 
+                            body: "Paso a desearte un día hermoso. Te amo muchísimo. ❤️" 
+                        });
+                    } else if (hours === 15) {
+                        new Notification("Pensando en ti 💕", { 
+                            body: "Espero que tu día vaya muy bonito. Recuerda lo especial que eres para mí. ✨" 
+                        });
+                    } else if (hours === 21) {
+                        new Notification("Buenas noches, mi vida 🌙", { 
+                            body: "Que tengas los sueños más dulces. Un abrazo fuerte a la distancia. 🥰" 
+                        });
+                    }
+                }
+            }, 60000);
+        }
+
         // REVELAR NOTA ESPECIAL
         function toggleSpecialSecret() {
             const secret = document.getElementById('specialSecret');
             secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
-        }
-
-        // SISTEMA DE NOTIFICACIONES DE AMOR
-        function requestNotificationPermission() {
-            if (!("Notification" in window)) {
-                document.getElementById('notifStatus').innerText = "Tu navegador no soporta notificaciones automáticas.";
-                return;
-            }
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    document.getElementById('notifStatus').innerText = "¡Notificaciones activadas! Te llegarán mensajes de amor cada día. 💕";
-                    sendTestNotification();
-                } else {
-                    document.getElementById('notifStatus').innerText = "Permiso denegado. Puedes activarlo desde la configuración del navegador.";
-                }
-            });
-        }
-
-        function sendTestNotification() {
-            if (Notification.permission === "granted") {
-                new Notification("Mensaje de Junior ❤️", {
-                    body: "¡Hola mi amor! Solo pasaba a recordarte lo mucho que te amo y lo especial que eres para mí. 🥰",
-                    icon: "https://cdn-icons-png.flaticon.com/512/2589/2589175.png"
-                });
-            } else {
-                requestNotificationPermission();
-            }
-        }
-
-        function scheduleDailyNotifications() {
-            if (Notification.permission === "granted") {
-                // Comprueba cada minuto si es la hora configurada (ejemplo: 9:00 AM, 3:00 PM, 9:00 PM)
-                setInterval(() => {
-                    const now = new Date();
-                    const hours = now.getHours();
-                    const minutes = now.getMinutes();
-
-                    if (minutes === 0) {
-                        if (hours === 9) {
-                            new Notification("Buenos días mi amor ☀️", { body: "Espero que tengas un día maravilloso. Te amo infinitamente. ❤️" });
-                        } else if (hours === 15) {
-                            new Notification("Paso a saludarte 💕", { body: "Espero que tu día vaya súper bien. Recuerda que siempre pienso en ti. ✨" });
-                        } else if (hours === 21) {
-                            new Notification("Buenas noches, hermosa 🌙", { body: "Que descanses y tengas los sueños más bonitos. Te envío un abrazo fuerte." });
-                        }
-                    }
-                }, 60000);
-            }
         }
 
         // CONTADOR DE ABRAZOS
