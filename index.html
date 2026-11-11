@@ -22,6 +22,25 @@
       transition: opacity 0.8s ease-out, visibility 0.8s;
     }
 
+    /* ANIMACIÓN DE CARGA DE IZQUIERDA A DERECHA EN LA LÍNEA ROJA */
+    .loader-line-red {
+      animation: loadLine 1.8s infinite ease-in-out;
+    }
+
+    @keyframes loadLine {
+      0% {
+        left: -100%;
+        width: 30%;
+      }
+      50% {
+        width: 60%;
+      }
+      100% {
+        left: 100%;
+        width: 30%;
+      }
+    }
+
     /* Texto 3D gigante de fondo NAXAREES */
     .bg-text-naxarees {
       font-size: clamp(4rem, 18vw, 22rem);
@@ -66,19 +85,20 @@
 </head>
 <body class="min-h-screen flex items-center justify-center relative bg-black overflow-y-auto py-8">
 
-  <!-- Audio de fondo (Reemplaza la URL por el MP3 que desees) -->
+  <!-- Audio de fondo -->
   <audio id="bg-music" loop>
     <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
   </audio>
 
   <!-- PANTALLA DE ENTRADA (CLICK TO ENTER) -->
   <div id="enter-screen" onclick="enterSite()" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center cursor-pointer select-none">
-    <div class="text-xs md:text-sm font-bold tracking-[0.3em] text-white uppercase mb-2 hover:scale-105 transition-transform">
+    <div class="text-xs md:text-sm font-bold tracking-[0.3em] text-white uppercase mb-3 hover:scale-105 transition-transform">
       CLICK TO ENTER
     </div>
-    <!-- Línea decorativa roja inferior -->
-    <div class="w-16 h-[2px] bg-neutral-800 relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-6 h-full bg-red-600"></div>
+    
+    <!-- Barra con animación de carga de izquierda a derecha -->
+    <div class="w-20 h-[2px] bg-neutral-800 relative overflow-hidden rounded-full">
+      <div class="loader-line-red absolute top-0 h-full bg-red-600 shadow-[0_0_8px_#ef4444]"></div>
     </div>
   </div>
 
@@ -96,7 +116,7 @@
     <!-- Indicador superior -->
     <div class="flex justify-center mb-3">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/10 backdrop-blur-md text-[11px] text-gray-300">
-        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
         <span><strong class="font-bold text-white">2</strong> viendo ahora</span>
       </div>
     </div>
@@ -192,12 +212,10 @@
   <script>
     const DISCORD_ID = '1506432227767226398';
 
-    // Función al hacer clic en CLICK TO ENTER
     function enterSite() {
       const enterScreen = document.getElementById('enter-screen');
       const music = document.getElementById('bg-music');
       
-      // Reproducir audio y ocultar pantalla de entrada
       music.play().catch(() => {});
       enterScreen.style.opacity = '0';
       setTimeout(() => {
@@ -224,19 +242,16 @@
           if (res.success && res.data) {
             const data = res.data;
 
-            // Foto de perfil
             if (data.discord_user.avatar) {
               const avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${data.discord_user.avatar}.png?size=256`;
               document.getElementById('discord-avatar').src = avatarUrl;
               document.getElementById('activity-avatar').src = avatarUrl;
             }
 
-            // Nombre de usuario
             if (data.discord_user.global_name || data.discord_user.username) {
               document.getElementById('discord-username').innerText = (data.discord_user.global_name || data.discord_user.username).toUpperCase();
             }
 
-            // Biografía real de Discord
             if (data.kv && data.kv.bio) {
               document.getElementById('discord-bio').innerText = data.kv.bio;
             } else if (data.activities) {
@@ -248,7 +263,6 @@
               }
             }
 
-            // Estado
             const statusDot = document.getElementById('discord-status-dot');
             const statusBadgeDot = document.getElementById('status-badge-dot');
             const statusText = document.getElementById('status-text');
