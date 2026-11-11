@@ -163,12 +163,13 @@
         <span id="typed-text"></span><span class="typing-cursor"></span>
       </p>
 
-      <!-- Tarjeta de Actividad en vivo flexible -->
+      <!-- Tarjeta de Actividad en vivo -->
       <div class="w-full bg-[#0a0a0c]/80 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
         <img id="activity-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-9 h-9 rounded-full object-cover shrink-0 border border-white/10" alt="Icon" />
         <div class="overflow-hidden leading-tight">
           <div id="card-username" class="text-[11px] font-bold text-white tracking-wide uppercase">NAXAREES7</div>
           <div id="card-discord-bio" class="text-[9px] text-gray-400 mt-0.5 uppercase tracking-wider hidden"></div>
+          <div id="card-discord-time" class="text-[9px] text-gray-500 mt-0.5 font-mono hidden"></div>
         </div>
       </div>
 
@@ -255,7 +256,25 @@
       }
     }
 
-    // LÓGICA DINÁMICA DE LA TARJETA DE ACTIVIDAD/DESCRIPCIÓN
+    let activityTimerInterval = null;
+
+    // Formatear el tiempo transcurrido en MM:SS o HH:MM:SS
+    function formatDuration(startTimeMs) {
+      const diffSecs = Math.floor((Date.now() - startTimeMs) / 1000);
+      const hours = Math.floor(diffSecs / 3600);
+      const mins = Math.floor((diffSecs % 3600) / 60);
+      const secs = diffSecs % 60;
+
+      const pMins = String(mins).padStart(2, '0');
+      const pSecs = String(secs).padStart(2, '0');
+
+      if (hours > 0) {
+        const pHours = String(hours).padStart(2, '0');
+        return `${pHours}:${pMins}:${pSecs}`;
+      }
+      return `${pMins}:${pSecs}`;
+    }
+
     function obtenerDatosDiscord() {
       fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
         .then(res => res.json())
@@ -275,33 +294,41 @@
             document.getElementById('discord-username').innerText = username;
             document.getElementById('card-username').innerText = username;
 
-            // 3. Tarjeta de Actividad / Descripión condicional
+            // 3. Actividad con "Jugando a..." y contador de tiempo
             const bioContainer = document.getElementById('card-discord-bio');
-            let subtext = "";
+            const timeContainer = document.getElementById('card-discord-time');
+            
+            if (activityTimerInterval) clearInterval(activityTimerInterval);
+            timeContainer.classList.add('hidden');
 
-            // Caso A: Si hay actividad activa (ej. Roblox, VS Code, Spotify, etc.)
+            let gameActivity = null;
             if (data.activities && data.activities.length > 0) {
-              const game = data.activities.find(a => a.type === 0); // Tipo Juego
-              const customStatus = data.activities.find(a => a.type === 4); // Estado personalizado
-
-              if (game && game.name) {
-                subtext = game.name;
-              } else if (customStatus && customStatus.state) {
-                subtext = customStatus.state;
-              } else if (data.activities[0].name) {
-                subtext = data.activities[0].name;
-              }
-            } 
-            // Caso B: Si está desconectado o sin actividad, pero tiene Bio en Lanyard KV
-            else if (data.kv && data.kv.bio) {
-              subtext = data.kv.bio;
+              gameActivity = data.activities.find(a => a.type === 0) || data.activities[0];
             }
 
-            // Verificar si hay texto secundario para mostrarlo u ocultarlo (si no hay, solo sale el nombre)
-            if (subtext.trim() !== "") {
-              bioContainer.innerText = subtext;
+            if (gameActivity && gameActivity.name) {
+              // Si es un juego o aplicación
+              bioContainer.innerText = `JUGANDO A ${gameActivity.name.toUpperCase()}`;
               bioContainer.classList.remove('hidden');
-            } else {
+
+              // Si Discord envía el timestamp de inicio (timestamps.start)
+              if (gameActivity.timestamps && gameActivity.timestamps.start) {
+                const startTime = gameActivity.timestamps.start;
+                timeContainer.innerText = formatDuration(startTime);
+                timeContainer.classList.remove('hidden');
+
+                activityTimerInterval = setInterval(() => {
+                  timeContainer.innerText = formatDuration(startTime);
+                }, 1000);
+              }
+            } 
+            else if (data.kv && data.kv.bio) {
+              // Si está desconectado pero tiene Bio en Lanyard KV
+              bioContainer.innerText = data.kv.bio;
+              bioContainer.classList.remove('hidden');
+            } 
+            else {
+              // Si no hay actividad ni bio, oculta la línea inferior para dejar solo el nombre
               bioContainer.innerText = "";
               bioContainer.classList.add('hidden');
             }
@@ -332,6 +359,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       obtenerDatosDiscord();
       typeWriter();
+      setInterval(obtenerDatosDiscord, 15000); // Re-verificar la API cada 15 segundos
     });
   </script>
 
