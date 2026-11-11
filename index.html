@@ -45,7 +45,7 @@
       50% { opacity: 0; }
     }
 
-    /* TEXTO 3D DE FONDO NAXAREES CON TAMAÑO AJUSTADO Y PROPORCIONAL */
+    /* Texto 3D de fondo NAXAREES */
     .bg-text-naxarees {
       font-size: clamp(3rem, 11vw, 12rem);
       font-weight: 900;
@@ -59,7 +59,7 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    /* TARJETA PRINCIPAL TRANSPARENTE CON GLASSMORPHISM ULTRA TRASLÚCIDO */
+    /* Tarjeta principal transparente */
     .glass-profile-card {
       background: rgba(10, 10, 12, 0.35);
       backdrop-filter: blur(12px);
@@ -70,14 +70,14 @@
         0 0 40px rgba(168, 85, 247, 0.15);
     }
 
-    /* Anillo neón morado brillante alrededor del avatar */
+    /* Anillo neón morado del avatar */
     .avatar-ring-glow {
       box-shadow: 
         0 0 25px #a855f7,
         0 0 50px rgba(168, 85, 247, 0.5);
     }
 
-    /* EFECTOS NEÓN EN HOVER PARA REDES SOCIALES */
+    /* Efectos neón en redes sociales */
     .social-btn {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -114,6 +114,10 @@
     .eq-bar {
       animation: eqBounce 1.2s infinite ease-in-out alternate;
     }
+    .eq-bar-paused {
+      animation-play-state: paused !important;
+      height: 4px !important;
+    }
     @keyframes eqBounce {
       0% { height: 4px; }
       100% { height: 32px; }
@@ -122,9 +126,9 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center relative bg-black overflow-y-auto py-8">
 
-  <!-- Audio de fondo -->
-  <audio id="bg-music" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+  <!-- REPRODUCTOR DE AUDIO MP3 (Ruta del archivo local) -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="musica.mp3" type="audio/mpeg" />
   </audio>
 
   <!-- PANTALLA DE ENTRADA (CLICK TO ENTER) -->
@@ -137,17 +141,17 @@
     </div>
   </div>
 
-  <!-- Fondo Neón & Texto 3D NAXAREES (Tamaño redimensionado) -->
+  <!-- Fondo Neón & Texto 3D NAXAREES -->
   <div class="fixed inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0">
     <div class="absolute -top-32 -left-32 w-[500px] h-[500px] bg-red-600/15 rounded-full blur-[150px]"></div>
     <div class="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-[150px]"></div>
     <h1 class="bg-text-naxarees select-none uppercase font-black tracking-tighter">NAXAREES</h1>
   </div>
 
-  <!-- Contenedor Principal de la tarjeta -->
+  <!-- Contenedor Principal -->
   <div class="relative z-10 w-full max-w-[420px] px-4">
 
-    <!-- Indicador superior: 2 viendo ahora -->
+    <!-- Indicador superior -->
     <div class="flex justify-center mb-3">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/70 border border-white/10 backdrop-blur-md text-[11px] text-gray-300">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
@@ -155,10 +159,10 @@
       </div>
     </div>
 
-    <!-- Tarjeta de Perfil Transparente -->
+    <!-- Tarjeta Transparente -->
     <div class="glass-profile-card rounded-[32px] p-6 flex flex-col items-center text-center relative overflow-hidden">
       
-      <!-- Avatar con Neón Morado -->
+      <!-- Avatar -->
       <div class="relative mb-4 mt-2">
         <div class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-purple-600 via-purple-400 to-indigo-500 avatar-ring-glow">
           <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-full h-full object-cover rounded-full bg-neutral-900" alt="Avatar" />
@@ -175,17 +179,17 @@
         <span id="status-text">EN LÍNEA</span>
       </div>
 
-      <!-- Botón de compra / acción -->
+      <!-- Botón principal -->
       <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full max-w-[280px] mt-5 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-700/90 via-red-600/90 to-red-800/90 hover:from-red-600 hover:to-red-700 font-extrabold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-900/40 border border-red-500/40 transition-transform active:scale-95">
         <i class="fa-solid fa-cart-shopping text-xs"></i> NAXAREES XITER
       </a>
 
-      <!-- Texto con Animación de Escritura y Borrado Loop -->
+      <!-- Texto Typing Loop -->
       <p class="text-[11px] text-gray-300 my-5 leading-relaxed px-2 font-normal min-h-[36px]">
         <span id="typed-text"></span><span class="typing-cursor"></span>
       </p>
 
-      <!-- Tarjeta de Actividad en vivo traslúcida -->
+      <!-- Tarjeta de Actividad Lanyard -->
       <div class="w-full bg-black/40 border border-white/10 rounded-2xl p-3 text-left mb-5 flex items-center gap-3 backdrop-blur-sm">
         <img id="activity-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-9 h-9 rounded-full object-cover shrink-0 border border-white/10" alt="Icon" />
         <div class="overflow-hidden leading-tight">
@@ -195,7 +199,7 @@
         </div>
       </div>
 
-      <!-- Iconos de Redes Sociales -->
+      <!-- Redes Sociales -->
       <div class="flex items-center justify-center gap-3 w-full mb-5">
         <a href="https://youtube.com" target="_blank" class="social-btn social-btn-yt w-10 h-10 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center text-gray-300 backdrop-blur-sm"><i class="fa-brands fa-youtube text-base"></i></a>
         <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="social-btn social-btn-dc w-10 h-10 rounded-xl bg-black/40 border border-white/10 flex items-center justify-center text-gray-300 backdrop-blur-sm"><i class="fa-brands fa-discord text-base"></i></a>
@@ -217,19 +221,14 @@
         <i class="fa-solid fa-arrow-right text-[10px] text-gray-500 group-hover:text-white transition-colors"></i>
       </a>
 
-      <!-- SECCIÓN INFERIOR PÍLDORAS -->
+      <!-- Sección de Píldoras -->
       <div class="flex flex-col items-center gap-2 w-full pt-1">
-        <!-- Píldora Vistas -->
         <div class="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full bg-black/40 border border-white/10 text-[11px] text-gray-300 font-medium min-w-[125px]">
           <i class="fa-regular fa-eye text-xs"></i> <span>66 vistas</span>
         </div>
-
-        <!-- Píldora Compartir -->
         <button onclick="shareProfile()" class="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full bg-black/40 border border-white/10 text-[11px] text-gray-300 font-medium hover:text-white hover:border-white/20 transition-colors min-w-[125px]">
           <i class="fa-solid fa-share-nodes text-xs"></i> <span>compartir</span>
         </button>
-
-        <!-- Reloj Digital -->
         <div id="live-clock" class="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium mt-1">
           <i class="fa-regular fa-clock"></i> <span>20:36:36</span>
         </div>
@@ -237,8 +236,8 @@
 
     </div>
 
-    <!-- ECUALIZADOR ROJO INFERIOR -->
-    <div class="mt-6 flex items-end justify-center gap-1 h-8 cursor-pointer" onclick="toggleAudio()">
+    <!-- Ecualizador de Audio Inferior (Click para Pausar/Reproducir) -->
+    <div class="mt-6 flex items-end justify-center gap-1 h-8 cursor-pointer" onclick="toggleAudio()" title="Pausar / Reproducir MP3">
       <span class="w-1 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.1s"></span>
       <span class="w-1 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.3s"></span>
       <span class="w-1 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.2s"></span>
@@ -258,13 +257,13 @@
 
   <script>
     const DISCORD_ID = '1506432227767226398';
+    const music = document.getElementById('bg-music');
 
-    // TEXTO DE LA BIO
+    // Texto de la bio
     const bioText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención garantizada.";
     let charIndex = 0;
     let isDeleting = false;
 
-    // Escribir y Borrar en bucle
     function handleTypingLoop() {
       const typedElement = document.getElementById("typed-text");
 
@@ -292,8 +291,6 @@
 
     function enterSite() {
       const enterScreen = document.getElementById('enter-screen');
-      const music = document.getElementById('bg-music');
-      
       music.play().catch(() => {});
       enterScreen.style.opacity = '0';
       setTimeout(() => {
@@ -302,11 +299,13 @@
     }
 
     function toggleAudio() {
-      const music = document.getElementById('bg-music');
+      const eqBars = document.querySelectorAll('.eq-bar');
       if (music.paused) {
         music.play();
+        eqBars.forEach(b => b.classList.remove('eq-bar-paused'));
       } else {
         music.pause();
+        eqBars.forEach(b => b.classList.add('eq-bar-paused'));
       }
     }
 
@@ -349,19 +348,16 @@
           if (res.success && res.data) {
             const data = res.data;
 
-            // 1. Avatar
             if (data.discord_user.avatar) {
               const avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${data.discord_user.avatar}.png?size=256`;
               document.getElementById('discord-avatar').src = avatarUrl;
               document.getElementById('activity-avatar').src = avatarUrl;
             }
 
-            // 2. Nombre de usuario
             const username = (data.discord_user.global_name || data.discord_user.username).toUpperCase();
             document.getElementById('discord-username').innerText = "NAXAREES LIVE";
             document.getElementById('card-username').innerText = username;
 
-            // 3. Actividad & Biografía
             const bioContainer = document.getElementById('card-discord-bio');
             const timeContainer = document.getElementById('card-discord-time');
             
@@ -396,7 +392,6 @@
               bioContainer.classList.add('hidden');
             }
 
-            // 4. Estado (Online, Idle, DND, Offline)
             const statusDot = document.getElementById('discord-status-dot');
             const statusBadgeDot = document.getElementById('status-badge-dot');
             const statusText = document.getElementById('status-text');
