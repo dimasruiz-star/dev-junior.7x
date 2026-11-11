@@ -41,6 +41,18 @@
       }
     }
 
+    /* CURSOR PARPADEANTE DE ESCRITURA */
+    .typing-cursor::after {
+      content: '|';
+      color: #ef4444;
+      animation: blinkCursor 0.8s infinite;
+    }
+
+    @keyframes blinkCursor {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
     /* Texto 3D gigante de fondo NAXAREES */
     .bg-text-naxarees {
       font-size: clamp(4rem, 18vw, 22rem);
@@ -146,9 +158,9 @@
         <i class="fa-solid fa-cart-shopping text-xs"></i> NAXAREES XITER
       </a>
 
-      <!-- Biografía REAL de Discord -->
-      <p id="discord-bio" class="text-[11px] text-gray-300 my-4 leading-relaxed px-1 font-normal">
-        Cargando biografía de Discord...
+      <!-- Texto con Animación de Escritura (Typing Effect) -->
+      <p class="text-[11px] text-gray-300 my-4 leading-relaxed px-1 font-normal min-h-[36px]">
+        <span id="typed-text"></span><span class="typing-cursor"></span>
       </p>
 
       <!-- Tarjeta de Actividad -->
@@ -212,6 +224,18 @@
   <script>
     const DISCORD_ID = '1506432227767226398';
 
+    // TEXTO A ESCRIBIR AUTOMÁTICAMENTE
+    const bioText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención garantizada.";
+    let charIndex = 0;
+
+    function typeWriter() {
+      if (charIndex < bioText.length) {
+        document.getElementById("typed-text").innerHTML += bioText.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeWriter, 40); // Velocidad de escritura en milisegundos
+      }
+    }
+
     function enterSite() {
       const enterScreen = document.getElementById('enter-screen');
       const music = document.getElementById('bg-music');
@@ -252,17 +276,6 @@
               document.getElementById('discord-username').innerText = (data.discord_user.global_name || data.discord_user.username).toUpperCase();
             }
 
-            if (data.kv && data.kv.bio) {
-              document.getElementById('discord-bio').innerText = data.kv.bio;
-            } else if (data.activities) {
-              const customStatus = data.activities.find(a => a.type === 4);
-              if (customStatus && customStatus.state) {
-                document.getElementById('discord-bio').innerText = customStatus.state;
-              } else {
-                document.getElementById('discord-bio').innerText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención garantizada.";
-              }
-            }
-
             const statusDot = document.getElementById('discord-status-dot');
             const statusBadgeDot = document.getElementById('status-badge-dot');
             const statusText = document.getElementById('status-text');
@@ -280,12 +293,13 @@
             statusText.innerText = status.label;
           }
         })
-        .catch(() => {
-          document.getElementById('discord-bio').innerText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención garantizada.";
-        });
+        .catch(() => {});
     }
 
-    window.addEventListener('DOMContentLoaded', obtenerDatosDiscord);
+    window.addEventListener('DOMContentLoaded', () => {
+      obtenerDatosDiscord();
+      typeWriter(); // Iniciar animación de escritura al cargar
+    });
   </script>
 
 </body>
