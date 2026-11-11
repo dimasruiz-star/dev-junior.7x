@@ -8,150 +8,182 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #050507;
-      color: #fff;
+      font-family: 'Inter', sans-serif;
+      background-color: #030303;
+      color: #ffffff;
       overflow-x: hidden;
     }
-    .bg-text {
-      font-size: clamp(3rem, 12vw, 15rem);
+
+    /* Pantalla de entrada Click to Enter */
+    #enter-screen {
+      transition: opacity 0.8s ease-out, visibility 0.8s;
+    }
+
+    /* Texto 3D gigante de fondo NAXAREES */
+    .bg-text-naxarees {
+      font-size: clamp(4rem, 18vw, 22rem);
       font-weight: 900;
-      letter-spacing: 2px;
-      color: rgba(255, 255, 255, 0.03);
-      text-stroke: 1px rgba(255, 255, 255, 0.1);
-      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+      letter-spacing: -2px;
+      color: rgba(255, 255, 255, 0.06);
+      text-shadow: 
+        0 1px 0 rgba(255, 255, 255, 0.15),
+        0 4px 10px rgba(0, 0, 0, 0.8),
+        -2px 2px 5px rgba(255, 255, 255, 0.05);
       user-select: none;
+      font-family: Arial, Helvetica, sans-serif;
     }
-    .glass-card {
-      background: rgba(18, 18, 24, 0.75);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.86), 
-                  0 0 40px -10px rgba(147, 51, 234, 0.15);
+
+    /* Tarjeta principal estilo Glassmorphism */
+    .glass-profile-card {
+      background: rgba(13, 13, 15, 0.85);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      box-shadow: 
+        0 40px 80px rgba(0, 0, 0, 0.9),
+        0 0 50px rgba(120, 50, 255, 0.12);
     }
-    .avatar-glow {
-      box-shadow: 0 0 25px #a855f7, 0 0 50px rgba(168, 85, 247, 0.4);
+
+    /* Anillo neón morado del avatar */
+    .avatar-ring-glow {
+      box-shadow: 
+        0 0 20px #9333ea,
+        0 0 40px rgba(147, 51, 234, 0.4);
     }
-    .typing-cursor::after {
-      content: '|';
-      animation: blink 1s infinite;
-      color: #ef4444;
+
+    /* Animación del ecualizador inferior */
+    .eq-bar {
+      animation: eqBounce 1.2s infinite ease-in-out alternate;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
-    }
-    .bar-anim {
-      animation: bounce 1.2s infinite ease-in-out alternate;
-    }
-    @keyframes bounce {
-      0% { height: 4px; }
-      100% { height: 28px; }
+    @keyframes eqBounce {
+      0% { height: 3px; }
+      100% { height: 26px; }
     }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center relative bg-black overflow-y-auto py-10">
+<body class="min-h-screen flex items-center justify-center relative bg-black overflow-y-auto py-8">
 
-  <!-- Fondo Neon & Texto 3D NAXAREES -->
-  <div class="fixed inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
-    <div class="absolute -top-40 -left-40 w-96 h-96 bg-red-600/20 rounded-full blur-[140px]"></div>
-    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-[140px]"></div>
-    <h1 class="bg-text select-none uppercase font-extrabold tracking-tighter">NAXAREES</h1>
+  <!-- Audio de fondo (Reemplaza la URL por el MP3 que desees) -->
+  <audio id="bg-music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- PANTALLA DE ENTRADA (CLICK TO ENTER) -->
+  <div id="enter-screen" onclick="enterSite()" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center cursor-pointer select-none">
+    <div class="text-xs md:text-sm font-bold tracking-[0.3em] text-white uppercase mb-2 hover:scale-105 transition-transform">
+      CLICK TO ENTER
+    </div>
+    <!-- Línea decorativa roja inferior -->
+    <div class="w-16 h-[2px] bg-neutral-800 relative overflow-hidden">
+      <div class="absolute top-0 right-0 w-6 h-full bg-red-600"></div>
+    </div>
   </div>
 
-  <!-- Contenedor Principal -->
-  <div class="relative z-10 w-full max-w-md px-4">
+  <!-- Fondo Neón & Texto 3D NAXAREES -->
+  <div class="fixed inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0">
+    <div class="absolute -top-32 -left-32 w-[500px] h-[500px] bg-red-600/15 rounded-full blur-[150px]"></div>
+    <div class="absolute -bottom-32 -right-32 w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-[150px]"></div>
+    
+    <h1 class="bg-text-naxarees select-none uppercase font-black tracking-tighter">NAXAREES</h1>
+  </div>
 
-    <!-- Live indicator badge -->
+  <!-- Contenedor Principal de la tarjeta -->
+  <div class="relative z-10 w-full max-w-[420px] px-4">
+
+    <!-- Indicador superior -->
     <div class="flex justify-center mb-3">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 border border-white/10 backdrop-blur-md text-xs text-gray-300">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-        <span><strong id="live-views">4</strong> viendo ahora</span>
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/10 backdrop-blur-md text-[11px] text-gray-300">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span><strong class="font-bold text-white">2</strong> viendo ahora</span>
       </div>
     </div>
 
-    <!-- Glass Profile Card -->
-    <div class="glass-card rounded-3xl p-6 flex flex-col items-center text-center relative overflow-hidden">
+    <!-- Tarjeta de Perfil -->
+    <div class="glass-profile-card rounded-[28px] p-6 flex flex-col items-center text-center relative overflow-hidden">
       
-      <!-- Avatar con Neón -->
-      <div class="relative mb-4 mt-2">
-        <div class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-purple-500 via-indigo-500 to-pink-500 avatar-glow transition-all duration-500">
+      <!-- Avatar con marco Neón Morado -->
+      <div class="relative mb-3 mt-1">
+        <div class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-purple-600 via-purple-400 to-indigo-500 avatar-ring-glow">
           <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-full h-full object-cover rounded-full bg-neutral-900" alt="Avatar" />
         </div>
-        <span id="discord-status-dot" class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-gray-500 border-2 border-black" title="Estado"></span>
+        <span id="discord-status-dot" class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-amber-500 border-2 border-[#0d0d0f]"></span>
       </div>
 
-      <!-- User Title & Status -->
-      <h2 id="discord-username" class="text-xl font-bold tracking-wide text-white uppercase">NAXAREES7</h2>
-      <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 mt-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-[11px] text-emerald-400">
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-        <span id="status-text">CONECTANDO...</span>
+      <!-- Título de Usuario -->
+      <h2 id="discord-username" class="text-lg font-extrabold tracking-wider text-red-500 uppercase">NAXAREES LIVE</h2>
+      
+      <!-- Insignia de Estado -->
+      <div class="inline-flex items-center gap-1.5 px-3 py-0.5 mt-1 rounded-full bg-black/60 border border-white/10 text-[10px] font-semibold text-gray-300 tracking-wide">
+        <span id="status-badge-dot" class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+        <span id="status-text">AUSENTE</span>
       </div>
 
-      <!-- Main Action Button -->
-      <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full mt-5 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-900/40 transition-all hover:scale-[1.02] active:scale-[0.98]">
-        <i class="fa-solid fa-cart-shopping"></i> NAXAREES XITER
+      <!-- Botón Principal -->
+      <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full mt-4 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-700 via-red-600 to-red-800 hover:from-red-600 hover:to-red-700 font-extrabold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 transition-transform active:scale-95">
+        <i class="fa-solid fa-cart-shopping text-xs"></i> NAXAREES XITER
       </a>
 
-      <!-- Description / Bio -->
-      <p class="text-xs text-gray-300 my-4 leading-relaxed px-2 font-light">
-        <span id="typed-bio"></span><span class="typing-cursor"></span>
+      <!-- Biografía REAL de Discord -->
+      <p id="discord-bio" class="text-[11px] text-gray-300 my-4 leading-relaxed px-1 font-normal">
+        Cargando biografía de Discord...
       </p>
 
-      <!-- Dynamic Discord Activity Card (VS Code / Games / Apps) -->
-      <div id="activity-box" class="w-full bg-black/40 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-purple-950/50 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
-          <i id="activity-icon" class="fa-solid fa-code text-lg"></i>
-        </div>
-        <div class="overflow-hidden">
-          <div id="activity-title" class="text-[11px] font-bold text-purple-300 truncate">Visual Studio Code</div>
-          <div id="activity-details" class="text-[10px] text-gray-400 truncate">Index.php:181039</div>
-          <div id="activity-state" class="text-[9px] text-gray-500 truncate">BrMods $30 Custom - iOS Panel Generator</div>
-        </div>
-      </div>
-
-      <!-- Social Media Icons -->
-      <div class="flex items-center justify-center gap-3 w-full mb-4">
-        <a href="https://youtube.com" target="_blank" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
-        <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition"><i class="fa-brands fa-discord"></i></a>
-        <a href="https://wa.me/" target="_blank" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition"><i class="fa-brands fa-whatsapp"></i></a>
-        <a href="https://tiktok.com" target="_blank" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition"><i class="fa-brands fa-tiktok"></i></a>
-      </div>
-
-      <!-- Link Card -->
-      <div onclick="copyDiscordLink()" class="w-full bg-black/30 border border-white/5 hover:border-white/20 rounded-xl p-3 flex items-center justify-between cursor-pointer transition group mb-4">
-        <div class="flex items-center gap-3">
-          <i class="fa-brands fa-discord text-xl text-indigo-400"></i>
-          <div class="text-left">
-            <div class="text-xs font-semibold text-white">Tienda De Hacks</div>
-            <div class="text-[10px] text-gray-400 group-hover:text-gray-200">https://discord.gg/YGtZFwfY3U</div>
+      <!-- Tarjeta de Actividad -->
+      <div class="w-full bg-[#0a0a0c]/80 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
+        <img id="activity-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-9 h-9 rounded-full object-cover shrink-0 border border-white/10" alt="Icon" />
+        <div class="overflow-hidden leading-tight">
+          <div class="text-[11px] font-bold text-white tracking-wide">NAXAREES LIVE</div>
+          <div class="text-[9px] text-gray-400 mt-0.5 truncate">
+            BrMods $30 Custom - iOS Panel Generator<br/>
+            SilentAim - Complex with Projects Nvidia<br/>
+            Clip - Roblox / FiveM / CS2 Dev
           </div>
         </div>
-        <i class="fa-regular fa-copy text-xs text-gray-500 group-hover:text-white"></i>
       </div>
 
-      <!-- Footer Info -->
-      <div class="flex items-center justify-between w-full text-[11px] text-gray-400 border-t border-white/5 pt-3">
-        <span class="flex items-center gap-1"><i class="fa-regular fa-eye"></i> <span id="view-count">53</span> vistas</span>
-        <button onclick="shareProfile()" class="hover:text-white transition flex items-center gap-1"><i class="fa-solid fa-share-nodes"></i> compartir</button>
-        <span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> <span id="live-clock">19:42:44</span></span>
+      <!-- Iconos de Redes Sociales -->
+      <div class="flex items-center justify-center gap-3 w-full mb-4">
+        <a href="https://youtube.com" target="_blank" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition-colors"><i class="fa-brands fa-youtube text-xs"></i></a>
+        <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition-colors"><i class="fa-brands fa-discord text-xs"></i></a>
+        <a href="https://wa.me/" target="_blank" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition-colors"><i class="fa-brands fa-whatsapp text-xs"></i></a>
+        <a href="https://tiktok.com" target="_blank" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition-colors"><i class="fa-brands fa-tiktok text-xs"></i></a>
+      </div>
+
+      <!-- Tarjeta Enlace -->
+      <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full bg-[#0a0a0c]/60 border border-white/5 hover:border-white/15 rounded-xl p-3 flex items-center justify-between transition-colors mb-4 group">
+        <div class="flex items-center gap-2.5">
+          <i class="fa-brands fa-discord text-lg text-gray-300"></i>
+          <div class="text-left">
+            <div class="text-[11px] font-bold text-white">Tienda De Hacks</div>
+            <div class="text-[9px] text-gray-400">https://discord.gg/YGtZFwfY3U</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-arrow-right text-[10px] text-gray-500 group-hover:text-white transition-colors"></i>
+      </a>
+
+      <!-- Pie de página -->
+      <div class="flex items-center justify-between w-full text-[10px] text-gray-400 border-t border-white/5 pt-3 font-medium">
+        <span class="flex items-center gap-1.5"><i class="fa-regular fa-eye"></i> 58 vistas</span>
+        <span class="flex items-center gap-1.5 cursor-pointer hover:text-white"><i class="fa-solid fa-share-nodes"></i> compartir</span>
+        <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock"></i> 19:50:45</span>
       </div>
 
     </div>
 
-    <!-- Audio Player Visualizer Bar -->
-    <div class="mt-4 flex items-center justify-center gap-4 bg-black/60 backdrop-blur-md border border-white/10 rounded-full py-2 px-6">
-      <div id="equalizer" class="flex items-end gap-1 h-6">
-        <span class="w-1 bg-red-500 rounded-full bar-anim" style="animation-delay: 0.1s"></span>
-        <span class="w-1 bg-red-500 rounded-full bar-anim" style="animation-delay: 0.3s"></span>
-        <span class="w-1 bg-red-500 rounded-full bar-anim" style="animation-delay: 0.2s"></span>
-        <span class="w-1 bg-red-500 rounded-full bar-anim" style="animation-delay: 0.4s"></span>
+    <!-- Barra inferior ecualizador de audio -->
+    <div class="mt-4 flex items-center justify-center gap-4 bg-black/70 backdrop-blur-md border border-white/10 rounded-full py-2 px-6 w-fit mx-auto">
+      <div class="flex items-end gap-0.5 h-5">
+        <span class="w-0.5 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.1s"></span>
+        <span class="w-0.5 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.3s"></span>
+        <span class="w-0.5 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.2s"></span>
+        <span class="w-0.5 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.5s"></span>
+        <span class="w-0.5 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.4s"></span>
       </div>
-      <button id="audio-toggle" onclick="toggleAudio()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-xs transition">
-        <i class="fa-solid fa-pause"></i>
+      <button onclick="toggleAudio()" class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-white text-[10px]">
+        <i id="audio-icon" class="fa-solid fa-pause"></i>
       </button>
     </div>
 
@@ -159,110 +191,88 @@
 
   <script>
     const DISCORD_ID = '1506432227767226398';
-    let lanyardWS;
 
-    function connectLanyard() {
-      if (lanyardWS) lanyardWS.close();
-
-      lanyardWS = new WebSocket('wss://api.lanyard.rest/socket');
-
-      lanyardWS.onopen = () => {
-        lanyardWS.send(JSON.stringify({
-          op: 2,
-          d: { subscribe_to_id: DISCORD_ID }
-        }));
-      };
-
-      lanyardWS.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.t === 'INIT_STATE' || data.t === 'PRESENCE_UPDATE') {
-          updateDiscordPresence(data.d);
-        }
-      };
-
-      lanyardWS.onclose = () => {
-        setTimeout(connectLanyard, 5000);
-      };
+    // Función al hacer clic en CLICK TO ENTER
+    function enterSite() {
+      const enterScreen = document.getElementById('enter-screen');
+      const music = document.getElementById('bg-music');
+      
+      // Reproducir audio y ocultar pantalla de entrada
+      music.play().catch(() => {});
+      enterScreen.style.opacity = '0';
+      setTimeout(() => {
+        enterScreen.style.display = 'none';
+      }, 800);
     }
 
-    function updateDiscordPresence(data) {
-      if (!data) return;
-
-      // Update Avatar
-      const avatarImg = document.getElementById('discord-avatar');
-      if (data.discord_user && data.discord_user.avatar) {
-        avatarImg.src = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=256`;
-      }
-
-      // Update Status Indicator
-      const statusDot = document.getElementById('discord-status-dot');
-      const statusText = document.getElementById('status-text');
-      const statusColors = {
-        online: 'bg-emerald-500',
-        idle: 'bg-amber-500',
-        dnd: 'bg-red-500',
-        offline: 'bg-gray-500'
-      };
-      statusDot.className = `absolute bottom-1 right-1 w-5 h-5 rounded-full border-2 border-black ${statusColors[data.discord_status] || 'bg-gray-500'}`;
-      statusText.innerText = data.discord_status === 'offline' ? 'DESCONECTADO' : data.discord_status.toUpperCase();
-
-      // Update Live Activity (VS Code, Games, Spotify, etc.)
-      if (data.activities && data.activities.length > 0) {
-        const act = data.activities.find(a => a.type === 0) || data.activities[0];
-        document.getElementById('activity-title').innerText = act.name || 'En actividad';
-        document.getElementById('activity-details').innerText = act.details || act.state || 'Activo';
-        document.getElementById('activity-state').innerText = act.state || 'En ejecución';
-
-        // Dynamic Icon Assignment
-        const iconElement = document.getElementById('activity-icon');
-        if (act.name.toLowerCase().includes('visual studio code')) {
-          iconElement.className = 'fa-solid fa-code text-lg';
-        } else if (act.name.toLowerCase().includes('spotify')) {
-          iconElement.className = 'fa-brands fa-spotify text-lg';
-        } else {
-          iconElement.className = 'fa-solid fa-gamepad text-lg';
-        }
-      }
-    }
-
-    // Typing Animation
-    const fullBioText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención ga";
-    let bioIdx = 0;
-    function typeBio() {
-      if (bioIdx < fullBioText.length) {
-        document.getElementById("typed-bio").innerHTML += fullBioText.charAt(bioIdx);
-        bioIdx++;
-        setTimeout(typeBio, 35);
-      }
-    }
-
-    // Clock
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
-    }
-
-    // Actions
-    function copyDiscordLink() {
-      navigator.clipboard.writeText("https://discord.gg/YGtZFwfY3U");
-      alert("¡Enlace de Discord copiado al portapapeles!");
-    }
-
-    function shareProfile() {
-      if (navigator.share) {
-        navigator.share({ title: 'NAXAREES LIVE', url: window.location.href });
+    function toggleAudio() {
+      const music = document.getElementById('bg-music');
+      const icon = document.getElementById('audio-icon');
+      if (music.paused) {
+        music.play();
+        icon.className = 'fa-solid fa-pause';
       } else {
-        navigator.clipboard.writeText(window.location.href);
-        alert("¡Enlace de la página copiado!");
+        music.pause();
+        icon.className = 'fa-solid fa-play';
       }
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      connectLanyard();
-      typeBio();
-      setInterval(updateClock, 1000);
-      updateClock();
-    });
+    function obtenerDatosDiscord() {
+      fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
+        .then(res => res.json())
+        .then(res => {
+          if (res.success && res.data) {
+            const data = res.data;
+
+            // Foto de perfil
+            if (data.discord_user.avatar) {
+              const avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${data.discord_user.avatar}.png?size=256`;
+              document.getElementById('discord-avatar').src = avatarUrl;
+              document.getElementById('activity-avatar').src = avatarUrl;
+            }
+
+            // Nombre de usuario
+            if (data.discord_user.global_name || data.discord_user.username) {
+              document.getElementById('discord-username').innerText = (data.discord_user.global_name || data.discord_user.username).toUpperCase();
+            }
+
+            // Biografía real de Discord
+            if (data.kv && data.kv.bio) {
+              document.getElementById('discord-bio').innerText = data.kv.bio;
+            } else if (data.activities) {
+              const customStatus = data.activities.find(a => a.type === 4);
+              if (customStatus && customStatus.state) {
+                document.getElementById('discord-bio').innerText = customStatus.state;
+              } else {
+                document.getElementById('discord-bio').innerText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención garantizada.";
+              }
+            }
+
+            // Estado
+            const statusDot = document.getElementById('discord-status-dot');
+            const statusBadgeDot = document.getElementById('status-badge-dot');
+            const statusText = document.getElementById('status-text');
+
+            const statusColors = {
+              online: { bg: 'bg-emerald-500', label: 'EN LÍNEA' },
+              idle: { bg: 'bg-amber-500', label: 'AUSENTE' },
+              dnd: { bg: 'bg-red-500', label: 'NO MOLESTAR' },
+              offline: { bg: 'bg-gray-500', label: 'DESCONECTADO' }
+            };
+
+            const status = statusColors[data.discord_status] || statusColors.offline;
+            statusDot.className = `absolute bottom-1 right-1 w-5 h-5 rounded-full border-2 border-[#0d0d0f] ${status.bg}`;
+            statusBadgeDot.className = `w-1.5 h-1.5 rounded-full ${status.bg}`;
+            statusText.innerText = status.label;
+          }
+        })
+        .catch(() => {
+          document.getElementById('discord-bio').innerText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención garantizada.";
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', obtenerDatosDiscord);
   </script>
+
 </body>
 </html>
