@@ -158,7 +158,7 @@
         <i class="fa-solid fa-cart-shopping text-xs"></i> NAXAREES XITER
       </a>
 
-      <!-- Texto con Animación de Escritura (Typing Effect) -->
+      <!-- Texto con Animación de Escribir y Borrar Loop -->
       <p class="text-[11px] text-gray-300 my-4 leading-relaxed px-1 font-normal min-h-[36px]">
         <span id="typed-text"></span><span class="typing-cursor"></span>
       </p>
@@ -221,15 +221,36 @@
   <script>
     const DISCORD_ID = '1506432227767226398';
 
-    // Texto de la Bio
+    // TEXTO DE LA BIO
     const bioText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención garantizada.";
     let charIndex = 0;
+    let isDeleting = false;
 
-    function typeWriter() {
-      if (charIndex < bioText.length) {
-        document.getElementById("typed-text").innerHTML += bioText.charAt(charIndex);
+    // Lógica para escribir, pausar, borrar y repetir
+    function handleTypingLoop() {
+      const typedElement = document.getElementById("typed-text");
+
+      if (!isDeleting && charIndex <= bioText.length) {
+        // Escribiendo
+        typedElement.innerHTML = bioText.substring(0, charIndex);
         charIndex++;
-        setTimeout(typeWriter, 35);
+        if (charIndex > bioText.length) {
+          isDeleting = true;
+          setTimeout(handleTypingLoop, 2500); // Pausa con el texto completo
+          return;
+        }
+        setTimeout(handleTypingLoop, 40); // Velocidad al escribir
+      } else if (isDeleting && charIndex >= 0) {
+        // Borrando
+        typedElement.innerHTML = bioText.substring(0, charIndex);
+        charIndex--;
+        if (charIndex < 0) {
+          isDeleting = false;
+          charIndex = 0;
+          setTimeout(handleTypingLoop, 500); // Pausa antes de volver a escribir
+          return;
+        }
+        setTimeout(handleTypingLoop, 20); // Velocidad al borrar
       }
     }
 
@@ -358,7 +379,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       obtenerDatosDiscord();
-      typeWriter();
+      handleTypingLoop();
       setInterval(updateClock, 1000);
       updateClock();
     });
