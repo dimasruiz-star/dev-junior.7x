@@ -218,7 +218,7 @@
         <span id="typed-text"></span><span class="typing-cursor"></span>
       </p>
 
-      <!-- Tarjeta de Actividad Lanyard (Juego, Spotify o Bio) -->
+      <!-- Tarjeta de Actividad Lanyard -->
       <div class="w-full bg-black/40 border border-white/10 rounded-2xl p-3 text-left mb-5 flex items-center gap-3 backdrop-blur-sm">
         <img id="activity-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-9 h-9 rounded-full object-cover shrink-0 border border-white/10" alt="Icon" />
         <div class="overflow-hidden leading-tight">
@@ -402,7 +402,6 @@
       return `${pMins}:${pSecs}`;
     }
 
-    // LÓGICA CON PRIORIDAD PARA SPOTIFY, JUEGOS Y BIO DE DISCORD
     function obtenerDatosDiscord() {
       fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
         .then(res => res.json())
@@ -426,22 +425,20 @@
             if (activityTimerInterval) clearInterval(activityTimerInterval);
             timeContainer.classList.add('hidden');
 
-            // 1. SI ESTÁ ESCUCHANDO SPOTIFY
+            // 1. SI ESTÁ ESCUCHANDO SPOTIFY ("ESCUCHANDO [CANCIÓN] - [ARTISTA]")
             if (data.listening_to_spotify && data.spotify) {
               const song = data.spotify.song.toUpperCase();
               const artist = data.spotify.artist ? ` - ${data.spotify.artist.toUpperCase()}` : '';
               
-              bioContainer.innerText = `ESCUCHANDO A ${song}${artist}`;
+              bioContainer.innerText = `ESCUCHANDO ${song}${artist}`;
               bioContainer.classList.remove('hidden');
 
-              // Imagen de la carátula de la canción en Spotify
               if (data.spotify.album_art_url) {
                 activityAvatar.src = data.spotify.album_art_url;
               } else {
                 activityAvatar.src = userAvatarUrl;
               }
 
-              // Tiempo de la canción en vivo
               if (data.spotify.timestamps && data.spotify.timestamps.start) {
                 const startTime = data.spotify.timestamps.start;
                 timeContainer.innerText = formatDuration(startTime);
@@ -478,7 +475,7 @@
               bioContainer.innerText = data.kv.bio;
               bioContainer.classList.remove('hidden');
             }
-            // 4. SI ESTÁ DESCONECTADO Y SIN BIO (MUESTRA SOLO NOMBRE)
+            // 4. SI ESTÁ DESCONECTADO Y SIN BIO
             else {
               activityAvatar.src = userAvatarUrl;
               bioContainer.innerText = "";
@@ -512,7 +509,7 @@
       obtenerDatosDiscord();
       handleTypingLoop();
       setInterval(updateClock, 1000);
-      setInterval(obtenerDatosDiscord, 10000); // Polling constante para actualizar Spotify o Juegos en tiempo real
+      setInterval(obtenerDatosDiscord, 10000);
       updateClock();
     });
   </script>
