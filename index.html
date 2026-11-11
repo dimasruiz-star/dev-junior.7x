@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TORRES LIVE - Discord Connected</title>
+  <title>NAXAREES LIVE</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
@@ -16,7 +16,7 @@
       overflow-x: hidden;
     }
     .bg-text {
-      font-size: clamp(5rem, 18vw, 22rem);
+      font-size: clamp(3rem, 12vw, 15rem);
       font-weight: 900;
       letter-spacing: 2px;
       color: rgba(255, 255, 255, 0.03);
@@ -55,21 +55,15 @@
 </head>
 <body class="min-h-screen flex items-center justify-center relative bg-black overflow-y-auto py-10">
 
-  <!-- Fondo Neon & Texto 3D -->
+  <!-- Fondo Neon & Texto 3D NAXAREES -->
   <div class="fixed inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
     <div class="absolute -top-40 -left-40 w-96 h-96 bg-red-600/20 rounded-full blur-[140px]"></div>
     <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-[140px]"></div>
-    <h1 class="bg-text select-none uppercase font-extrabold tracking-tighter">TORRES</h1>
+    <h1 class="bg-text select-none uppercase font-extrabold tracking-tighter">NAXAREES</h1>
   </div>
 
   <!-- Contenedor Principal -->
   <div class="relative z-10 w-full max-w-md px-4">
-    
-    <!-- Modal de Configuración de ID de Discord -->
-    <div id="config-banner" class="mb-4 p-3 bg-purple-900/40 border border-purple-500/30 rounded-xl text-xs text-purple-200 flex items-center justify-between">
-      <span><i class="fa-brands fa-discord mr-2"></i> Estado de Discord: <strong id="discord-status-text">Conectando...</strong></span>
-      <button onclick="promptDiscordID()" class="px-2 py-1 bg-purple-600 hover:bg-purple-500 rounded text-white text-[10px] transition">Cambiar ID</button>
-    </div>
 
     <!-- Live indicator badge -->
     <div class="flex justify-center mb-3">
@@ -84,22 +78,22 @@
       
       <!-- Avatar con Neón -->
       <div class="relative mb-4 mt-2">
-        <div id="avatar-ring" class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-purple-500 via-indigo-500 to-pink-500 avatar-glow transition-all duration-500">
+        <div class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-purple-500 via-indigo-500 to-pink-500 avatar-glow transition-all duration-500">
           <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-full h-full object-cover rounded-full bg-neutral-900" alt="Avatar" />
         </div>
-        <span id="discord-status-dot" class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-gray-500 border-2 border-black" title="Estado"></span>
+        <span class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-black" title="Estado"></span>
       </div>
 
       <!-- User Title & Status -->
-      <h2 id="discord-username" class="text-xl font-bold tracking-wide text-white uppercase">TORRES LIVE</h2>
+      <h2 class="text-xl font-bold tracking-wide text-white uppercase">NAXAREES7</h2>
       <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 mt-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-[11px] text-emerald-400">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-        <span id="status-text">EN LÍNEA</span>
+        <span>EN LÍNEA</span>
       </div>
 
       <!-- Main Action Button -->
       <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full mt-5 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-900/40 transition-all hover:scale-[1.02] active:scale-[0.98]">
-        <i class="fa-solid fa-cart-shopping"></i> TORRES XITER
+        <i class="fa-solid fa-cart-shopping"></i> NAXAREES XITER
       </a>
 
       <!-- Description / Bio -->
@@ -107,15 +101,15 @@
         <span id="typed-bio"></span><span class="typing-cursor"></span>
       </p>
 
-      <!-- Discord Presence / Activity Card -->
-      <div id="activity-box" class="w-full bg-black/40 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
+      <!-- Actividad Fija Estática (Visual Studio Code) -->
+      <div class="w-full bg-black/40 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-purple-950/50 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
-          <i id="activity-icon" class="fa-solid fa-code text-lg"></i>
+          <i class="fa-solid fa-code text-lg"></i>
         </div>
         <div class="overflow-hidden">
-          <div id="activity-title" class="text-[11px] font-bold text-purple-300 truncate">Visual Studio Code</div>
-          <div id="activity-details" class="text-[10px] text-gray-400 truncate">Index.php:181039</div>
-          <div id="activity-state" class="text-[9px] text-gray-500 truncate">BrMods $30 Custom - iOS Panel Generator</div>
+          <div class="text-[11px] font-bold text-purple-300 truncate">Visual Studio Code</div>
+          <div class="text-[10px] text-gray-400 truncate">Index.php:181039</div>
+          <div class="text-[9px] text-gray-500 truncate">BrMods $30 Custom - iOS Panel Generator</div>
         </div>
       </div>
 
@@ -143,7 +137,7 @@
       <div class="flex items-center justify-between w-full text-[11px] text-gray-400 border-t border-white/5 pt-3">
         <span class="flex items-center gap-1"><i class="fa-regular fa-eye"></i> <span id="view-count">53</span> vistas</span>
         <button onclick="shareProfile()" class="hover:text-white transition flex items-center gap-1"><i class="fa-solid fa-share-nodes"></i> compartir</button>
-        <span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> <span id="live-clock">18:10:39</span></span>
+        <span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> <span id="live-clock">19:42:44</span></span>
       </div>
 
     </div>
@@ -163,84 +157,24 @@
 
   </div>
 
-  <!-- Lanyard / Discord API Integration -->
   <script>
-    // Tu ID de Discord (Configurado por defecto o personalizable)
-    let DISCORD_ID = localStorage.getItem('discord_user_id') || 'YOUR_DISCORD_USER_ID';
+    // Tu ID de Discord guardado directamente en el código de forma interna
+    const DISCORD_ID = '1506432227767226398';
 
-    function promptDiscordID() {
-      const id = prompt("Ingresa tu Discord User ID (ID de usuario de 18-19 dígitos):", DISCORD_ID);
-      if(id) {
-        localStorage.setItem('discord_user_id', id.trim());
-        DISCORD_ID = id.trim();
-        connectLanyard();
-      }
+    // Cargar la foto de perfil en segundo plano desde la API
+    function cargarFotoPerfil() {
+      fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
+        .then(res => res.json())
+        .then(res => {
+          if(res.success && res.data.discord_user.avatar) {
+            const avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${res.data.discord_user.avatar}.png?size=256`;
+            document.getElementById('discord-avatar').src = avatarUrl;
+          }
+        })
+        .catch(() => {});
     }
 
-    // WebSocket Lanyard API
-    let lanyardWS;
-    function connectLanyard() {
-      if (lanyardWS) lanyardWS.close();
-      
-      const statusText = document.getElementById('discord-status-text');
-      statusText.innerText = "Conectando...";
-
-      lanyardWS = new WebSocket('wss://api.lanyard.rest/socket');
-
-      lanyardWS.onopen = () => {
-        lanyardWS.send(JSON.stringify({
-          op: 2,
-          d: { subscribe_to_id: DISCORD_ID }
-        }));
-      };
-
-      lanyardWS.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.t === 'INIT_STATE' || data.t === 'PRESENCE_UPDATE') {
-          updateDiscordPresence(data.d);
-          statusText.innerText = "Conectado (" + DISCORD_ID + ")";
-        }
-      };
-
-      lanyardWS.onerror = () => {
-        statusText.innerText = "ID No Encontrado / Error";
-      };
-    }
-
-    function updateDiscordPresence(data) {
-      if (!data) return;
-
-      // Avatar
-      const avatarImg = document.getElementById('discord-avatar');
-      if (data.discord_user.avatar) {
-        avatarImg.src = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=256`;
-      }
-
-      // Username
-      document.getElementById('discord-username').innerText = data.discord_user.global_name || data.discord_user.username;
-
-      // Status Indicator Dot & Text
-      const statusDot = document.getElementById('discord-status-dot');
-      const statusText = document.getElementById('status-text');
-      const statusColors = {
-        online: 'bg-emerald-500',
-        idle: 'bg-amber-500',
-        dnd: 'bg-red-500',
-        offline: 'bg-gray-500'
-      };
-      statusDot.className = `absolute bottom-1 right-1 w-5 h-5 rounded-full border-2 border-black ${statusColors[data.discord_status] || 'bg-gray-500'}`;
-      statusText.innerText = data.discord_status === 'offline' ? 'DESCONECTADO' : data.discord_status.toUpperCase();
-
-      // Activity / Rich Presence (VS Code, Games, Custom Status)
-      if (data.activities && data.activities.length > 0) {
-        const act = data.activities.find(a => a.type === 0) || data.activities[0];
-        document.getElementById('activity-title').innerText = act.name || 'En actividad';
-        document.getElementById('activity-details').innerText = act.details || act.state || 'Activo en Discord';
-        document.getElementById('activity-state').innerText = act.state || 'En ejecución';
-      }
-    }
-
-    // Typing Animation
+    // Animación de escritura de la Bio
     const fullBioText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención ga";
     let bioIdx = 0;
     function typeBio() {
@@ -251,13 +185,13 @@
       }
     }
 
-    // Live Clock & View Counter
+    // Reloj digital en vivo
     function updateClock() {
       const now = new Date();
       document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
     }
 
-    // Copy & Share Actions
+    // Funciones de copiar y compartir
     function copyDiscordLink() {
       navigator.clipboard.writeText("https://discord.gg/YGtZFwfY3U");
       alert("¡Enlace de Discord copiado al portapapeles!");
@@ -265,19 +199,18 @@
 
     function shareProfile() {
       if (navigator.share) {
-        navigator.share({ title: 'TORRES LIVE', url: window.location.href });
+        navigator.share({ title: 'NAXAREES LIVE', url: window.location.href });
       } else {
         navigator.clipboard.writeText(window.location.href);
         alert("¡Enlace de la página copiado!");
       }
     }
 
-    // Init
     window.addEventListener('DOMContentLoaded', () => {
+      cargarFotoPerfil();
       typeBio();
       setInterval(updateClock, 1000);
       updateClock();
-      connectLanyard();
     });
   </script>
 </body>
