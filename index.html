@@ -41,7 +41,7 @@
       }
     }
 
-    /* Cursor parpadeante de escritura */
+    /* Cursor parpadeante de escritura red */
     .typing-cursor::after {
       content: '|';
       color: #ef4444;
@@ -55,10 +55,10 @@
 
     /* Texto 3D gigante de fondo NAXAREES */
     .bg-text-naxarees {
-      font-size: clamp(4rem, 18vw, 22rem);
+      font-size: clamp(6rem, 25vw, 28rem);
       font-weight: 900;
       letter-spacing: -2px;
-      color: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.08);
       text-shadow: 
         0 1px 0 rgba(255, 255, 255, 0.15),
         0 4px 10px rgba(0, 0, 0, 0.8),
@@ -67,7 +67,7 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    /* Tarjeta principal estilo Glassmorphism */
+    /* Tarjeta principal estilo Glassmorphism idéntica a la imagen */
     .glass-profile-card {
       background: rgba(13, 13, 15, 0.85);
       backdrop-filter: blur(25px);
@@ -75,7 +75,7 @@
       border: 1px solid rgba(255, 255, 255, 0.07);
       box-shadow: 
         0 40px 80px rgba(0, 0, 0, 0.9),
-        0 0 50px rgba(147, 51, 234, 0.12);
+        0 0 50px rgba(120, 50, 255, 0.12);
     }
 
     /* Anillo neón morado del avatar */
@@ -163,7 +163,7 @@
         <span id="typed-text"></span><span class="typing-cursor"></span>
       </p>
 
-      <!-- Tarjeta de Actividad/Bio Integrada con Discord -->
+      <!-- Tarjeta de Actividad en vivo -->
       <div class="w-full bg-[#0a0a0c]/80 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
         <img id="activity-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-9 h-9 rounded-full object-cover shrink-0 border border-white/10" alt="Icon" />
         <div class="overflow-hidden leading-tight">
@@ -195,9 +195,9 @@
 
       <!-- Pie de página -->
       <div class="flex items-center justify-between w-full text-[10px] text-gray-400 border-t border-white/5 pt-3 font-medium">
-        <span class="flex items-center gap-1.5"><i class="fa-regular fa-eye"></i> 64 vistas</span>
+        <span class="flex items-center gap-1.5"><i class="fa-regular fa-eye"></i> 65 vistas</span>
         <span class="flex items-center gap-1.5 cursor-pointer hover:text-white"><i class="fa-solid fa-share-nodes"></i> compartir</span>
-        <span id="live-clock" class="flex items-center gap-1.5"><i class="fa-regular fa-clock"></i> 20:22:14</span>
+        <span id="live-clock" class="flex items-center gap-1.5"><i class="fa-regular fa-clock"></i> 20:28:39</span>
       </div>
 
     </div>
@@ -226,31 +226,29 @@
     let charIndex = 0;
     let isDeleting = false;
 
-    // Lógica para escribir, pausar, borrar y repetir
+    // Escribir y Borrar en bucle
     function handleTypingLoop() {
       const typedElement = document.getElementById("typed-text");
 
       if (!isDeleting && charIndex <= bioText.length) {
-        // Escribiendo
         typedElement.innerHTML = bioText.substring(0, charIndex);
         charIndex++;
         if (charIndex > bioText.length) {
           isDeleting = true;
-          setTimeout(handleTypingLoop, 2500); // Pausa con el texto completo
+          setTimeout(handleTypingLoop, 2500);
           return;
         }
-        setTimeout(handleTypingLoop, 40); // Velocidad al escribir
+        setTimeout(handleTypingLoop, 40);
       } else if (isDeleting && charIndex >= 0) {
-        // Borrando
         typedElement.innerHTML = bioText.substring(0, charIndex);
         charIndex--;
         if (charIndex < 0) {
           isDeleting = false;
           charIndex = 0;
-          setTimeout(handleTypingLoop, 500); // Pausa antes de volver a escribir
+          setTimeout(handleTypingLoop, 500);
           return;
         }
-        setTimeout(handleTypingLoop, 20); // Velocidad al borrar
+        setTimeout(handleTypingLoop, 20);
       }
     }
 
