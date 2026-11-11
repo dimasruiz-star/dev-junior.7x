@@ -1,1086 +1,284 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Para ti, mi amor ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #ff2a6d;
-            --primary-glow: rgba(255, 42, 109, 0.6);
-            --secondary: #ff758c;
-            --accent: #ffccd5;
-            --bg-dark: #050109;
-            --glass-bg: rgba(255, 255, 255, 0.04);
-            --glass-border: rgba(255, 255, 255, 0.14);
-            --text-light: #ffffff;
-            --text-sub: #f8a5c2;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-light);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-            -webkit-user-select: none;
-            user-select: none;
-            position: relative;
-        }
-
-        /* --- FONDO NEÓN AURORA DINÁMICO --- */
-        .aurora-bg {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .aurora-blob {
-            position: absolute;
-            filter: blur(90px);
-            opacity: 0.5;
-            border-radius: 50%;
-            animation: floatGlow 16s infinite alternate ease-in-out;
-        }
-
-        .blob-1 { width: 400px; height: 400px; background: #ff2a6d; top: -100px; left: -100px; }
-        .blob-2 { width: 450px; height: 450px; background: #7928ca; bottom: -120px; right: -80px; animation-delay: -4s; }
-        .blob-3 { width: 350px; height: 350px; background: #ff758c; top: 35%; left: 25%; animation-delay: -8s; }
-        .blob-4 { width: 300px; height: 300px; background: #e056fd; bottom: 20%; left: -50px; animation-delay: -12s; }
-
-        @keyframes floatGlow {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(70px, 50px) scale(1.18); }
-            100% { transform: translate(-50px, 90px) scale(0.88); }
-        }
-
-        #canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-
-        /* --- PANTALLA DE BLOQUEO DE HUELLA DACTILAR --- */
-        #lock-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle at center, #230413, #040107);
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            text-align: center;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-
-        #lock-screen.unlocked {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .lock-title {
-            font-family: 'Great Vibes', cursive;
-            font-size: 5.5rem;
-            background: linear-gradient(135deg, #ffffff 20%, #ff758c, #ff2a6d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 40px;
-            filter: drop-shadow(0 0 25px var(--primary-glow));
-        }
-
-        .fingerprint-wrapper {
-            position: relative;
-            width: 170px;
-            height: 170px;
-            border-radius: 50%;
-            background: rgba(12, 3, 16, 0.7);
-            border: 2px solid rgba(255, 117, 140, 0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 0 60px rgba(255, 42, 109, 0.35), inset 0 0 25px rgba(255, 42, 109, 0.2);
-            -webkit-tap-highlight-color: transparent;
-            backdrop-filter: blur(20px);
-        }
-
-        .fingerprint-wrapper::before {
-            content: '';
-            position: absolute;
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            border: 2px solid var(--primary);
-            opacity: 0;
-            animation: pulseGlow 2s infinite;
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(1); opacity: 0.9; }
-            100% { transform: scale(1.4); opacity: 0; }
-        }
-
-        .fingerprint-svg {
-            width: 95px;
-            height: 95px;
-            fill: none;
-            stroke: #ffffff;
-            stroke-width: 3.5;
-            stroke-linecap: round;
-            opacity: 0.95;
-            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.6));
-        }
-
-        .scan-laser {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 4px;
-            background: linear-gradient(90deg, transparent, #ff2a6d, #ffffff, #ff2a6d, transparent);
-            box-shadow: 0 0 30px #ff2a6d, 0 0 12px #ffffff;
-            opacity: 0;
-            border-radius: 2px;
-        }
-
-        @keyframes scanAnim {
-            0% { top: 10%; opacity: 1; }
-            50% { top: 90%; opacity: 1; }
-            100% { top: 10%; opacity: 1; }
-        }
-
-        .lock-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-sub);
-            margin-top: 45px;
-            font-weight: 300;
-            letter-spacing: 0.8px;
-        }
-
-        /* --- CONTENIDO PRINCIPAL --- */
-        .container {
-            width: 92%; max-width: 880px;
-            z-index: 1; padding: 60px 0;
-            display: none;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .container.show {
-            display: block;
-            opacity: 1;
-        }
-
-        header { text-align: center; margin-bottom: 50px; }
-        
-        header h1 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 5.5rem;
-            background: linear-gradient(45deg, #ff4b72, #ffb3c1, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 35px rgba(255, 42, 109, 0.6));
-            line-height: 1.1;
-        }
-
-        header p { font-size: 1.3rem; color: var(--text-sub); margin-top: 10px; font-weight: 300; }
-
-        .badge-tag {
-            display: inline-block;
-            background: rgba(255, 42, 109, 0.15);
-            border: 1px solid rgba(255, 117, 140, 0.4);
-            padding: 12px 30px; border-radius: 30px;
-            font-size: 0.95rem; margin-top: 22px;
-            backdrop-filter: blur(20px); color: var(--accent);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-            letter-spacing: 0.5px;
-        }
-
-        /* CARD DE CRISTAL / GLASSMORPHISM PREMIUM */
-        .card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-radius: 30px;
-            padding: 38px;
-            margin-bottom: 38px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.15);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
-            transition: left 0.75s ease;
-        }
-
-        .card:hover::before { left: 100%; }
-
-        .card h2 {
-            font-size: 1.8rem; color: var(--accent);
-            text-align: center; margin-bottom: 28px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 18px rgba(255, 42, 109, 0.4);
-        }
-
-        /* DEDICATORIA ESPECIAL */
-        .special-badge {
-            background: linear-gradient(135deg, rgba(255, 42, 109, 0.15), rgba(255, 117, 140, 0.05));
-            border: 1px solid rgba(255, 117, 140, 0.4);
-            border-radius: 24px;
-            padding: 30px;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .special-badge:hover {
-            box-shadow: 0 12px 35px rgba(255, 42, 109, 0.4);
-            transform: translateY(-4px);
-            border-color: var(--secondary);
-        }
-
-        .special-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem;
-            color: #ffffff;
-            margin-bottom: 10px;
-            text-shadow: 0 0 15px var(--primary-glow);
-        }
-
-        .special-desc { font-size: 1.05rem; color: var(--accent); line-height: 1.6; }
-
-        .special-secret {
-            display: none;
-            margin-top: 20px;
-            padding: 22px;
-            background: rgba(255, 42, 109, 0.25);
-            border-radius: 18px;
-            color: #ffffff;
-            font-style: italic;
-            font-size: 1.08rem;
-            line-height: 1.75;
-            border: 1px dashed rgba(255, 255, 255, 0.35);
-        }
-
-        /* GALERÍA POLAROID 3D PREMIUM */
-        .polaroid-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 30px;
-            margin-top: 22px;
-        }
-
-        .polaroid-card {
-            background: transparent;
-            perspective: 1000px;
-            height: 340px;
-            cursor: pointer;
-        }
-
-        .polaroid-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            transition: transform 0.85s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-        }
-
-        .polaroid-card.flipped .polaroid-inner {
-            transform: rotateY(180deg);
-        }
-
-        .polaroid-front, .polaroid-back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            border-radius: 20px;
-            padding: 16px 16px 24px 16px;
-            background: #ffffff;
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
-            color: #222222;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Detalle de cinta adhesiva en las esquinas */
-        .polaroid-front::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            width: 75px;
-            height: 24px;
-            background: rgba(255, 255, 255, 0.45);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            transform: rotate(-5deg);
-            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-        }
-
-        .polaroid-front img {
-            width: 100%;
-            height: 235px;
-            object-fit: cover;
-            border-radius: 14px;
-        }
-
-        .polaroid-front .caption {
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.6rem;
-            color: #ff2a6d;
-            margin-top: 12px;
-            font-weight: bold;
-        }
-
-        .polaroid-back {
-            background: linear-gradient(145deg, #ff758c, #ff2a6d);
-            color: #ffffff;
-            transform: rotateY(180deg);
-            justify-content: center;
-            padding: 28px;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-        }
-
-        .polaroid-back p {
-            font-size: 1.08rem;
-            line-height: 1.65;
-            font-style: italic;
-        }
-
-        .polaroid-back .date-tag {
-            margin-top: 20px;
-            font-size: 0.88rem;
-            background: rgba(255, 255, 255, 0.28);
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        /* TARJETA RASPA Y GANA */
-        .scratch-card {
-            background: rgba(8, 2, 12, 0.65);
-            border: 2px dashed var(--secondary);
-            border-radius: 24px;
-            padding: 32px;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .scratch-card:hover { border-color: #ffffff; box-shadow: 0 0 30px var(--primary-glow); }
-
-        .scratch-content {
-            font-size: 1.2rem;
-            color: var(--accent);
-            font-weight: 600;
-            display: none;
-            line-height: 1.65;
-        }
-
-        /* LÍNEA DE TIEMPO ESTILIZADA */
-        .timeline {
-            position: relative;
-            margin: 22px 0;
-            padding-left: 28px;
-            border-left: 2px dashed rgba(255, 117, 140, 0.45);
-        }
-
-        .timeline-item {
-            margin-bottom: 30px;
-            position: relative;
-            padding-left: 22px;
-        }
-
-        .timeline-item::before {
-            content: '💖';
-            position: absolute;
-            left: -41px;
-            top: 0;
-            font-size: 1.3rem;
-            filter: drop-shadow(0 0 10px var(--primary));
-        }
-
-        .timeline-date {
-            font-size: 0.88rem;
-            color: var(--accent);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .timeline-title {
-            font-size: 1.18rem;
-            color: #ffffff;
-            font-weight: 600;
-            margin: 4px 0;
-        }
-
-        .timeline-desc {
-            font-size: 0.98rem;
-            color: var(--text-sub);
-            line-height: 1.65;
-        }
-
-        /* CONTADOR DE TIEMPO */
-        .counter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(88px, 1fr)); gap: 16px; margin-top: 20px; }
-        .counter-box {
-            background: rgba(255, 255, 255, 0.035);
-            border: 1px solid rgba(255, 255, 255, 0.09);
-            border-radius: 22px; padding: 20px 10px; text-align: center;
-            box-shadow: inset 0 0 18px rgba(255, 42, 109, 0.1);
-        }
-        .counter-box span {
-            display: block; font-size: 2.5rem; font-weight: 700;
-            background: linear-gradient(180deg, #ffffff, var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .counter-box label { font-size: 0.74rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; }
-
-        /* CANDADO DE PROMESAS */
-        .lock-container {
-            text-align: center; background: rgba(8, 2, 12, 0.55);
-            border-radius: 24px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.09);
-        }
-        .lock-icon { font-size: 4.5rem; cursor: pointer; margin-bottom: 14px; display: inline-block; filter: drop-shadow(0 0 18px var(--primary-glow)); }
-        .lock-secret {
-            display: none; background: rgba(255, 42, 109, 0.2);
-            border: 1px solid var(--secondary); padding: 22px;
-            border-radius: 20px; margin-top: 18px; font-size: 1.08rem; line-height: 1.75;
-        }
-
-        /* GENERADOR DE FRASES Y BOTONES */
-        .phrase-box {
-            background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 117, 140, 0.45);
-            padding: 30px; border-radius: 24px; text-align: center;
-        }
-        .phrase-text {
-            font-size: 1.22rem; color: #ffffff; margin-bottom: 24px;
-            font-style: italic; min-height: 60px; display: flex; align-items: center; justify-content: center;
-            line-height: 1.65;
-        }
-        .btn-magic {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white; border: none; padding: 14px 35px;
-            border-radius: 30px; font-weight: 600; cursor: pointer;
-            box-shadow: 0 10px 28px rgba(255, 42, 109, 0.5);
-            font-size: 0.98rem; letter-spacing: 0.5px;
-        }
-        .btn-magic:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 14px 35px rgba(255, 42, 109, 0.65); }
-
-        /* QUIZ */
-        .quiz-box { background: rgba(255, 255, 255, 0.03); border-radius: 24px; padding: 24px; text-align: center; }
-        .quiz-btn {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 117, 140, 0.35);
-            color: white; padding: 15px 24px; border-radius: 18px; margin: 10px 0;
-            width: 100%; cursor: pointer; font-family: 'Poppins', sans-serif; text-align: left;
-            font-size: 0.98rem;
-        }
-        .quiz-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateX(5px); }
-
-        /* BUCKET LIST */
-        .bucket-list { list-style: none; }
-        .bucket-list li {
-            background: rgba(255, 255, 255, 0.035); margin-bottom: 14px;
-            padding: 16px 22px; border-radius: 20px; display: flex; align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.07); font-size: 1rem;
-        }
-        .bucket-list input { width: 23px; height: 23px; accent-color: var(--primary); margin-right: 18px; cursor: pointer; }
-
-        .progress-bar-bg { background: rgba(255, 255, 255, 0.09); height: 12px; border-radius: 10px; margin-bottom: 24px; overflow: hidden; }
-        .progress-bar-fill { background: linear-gradient(90deg, var(--primary), var(--secondary)); height: 100%; width: 0%; transition: width 0.5s ease; }
-
-        /* SOBRES SECRETOS */
-        .envelope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 22px; }
-        .envelope-card {
-            background: rgba(255, 255, 255, 0.045);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px; padding: 24px; text-align: center; cursor: pointer;
-        }
-        .envelope-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.09); border-color: var(--primary); }
-        .envelope-icon { font-size: 3.2rem; margin-bottom: 12px; filter: drop-shadow(0 0 12px var(--primary-glow)); }
-        .envelope-title { font-weight: 600; color: var(--accent); }
-        .envelope-text { display: none; margin-top: 15px; font-size: 0.95rem; color: #ffffff; background: rgba(255, 42, 109, 0.22); padding: 15px; border-radius: 16px; line-height: 1.65; }
-
-        /* CARTA */
-        .letter-container {
-            background: rgba(255, 255, 255, 0.035);
-            border-left: 4px solid var(--primary);
-            padding: 26px;
-            border-radius: 18px;
-            font-style: italic;
-            font-size: 1.1rem;
-            line-height: 1.85;
-            color: #ffffff;
-        }
-
-        footer { text-align: center; padding: 35px; font-size: 0.98rem; color: var(--text-sub); }
-
-        .floating-heart {
-            position: fixed; pointer-events: none; font-size: 28px;
-            animation: floatUp 1.2s ease-out forwards; z-index: 9999;
-            filter: drop-shadow(0 0 10px var(--primary));
-        }
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); }
-            100% { opacity: 0; transform: translate(-50%, -135px) scale(1.5); }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TORRES LIVE - Discord Connected</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #050507;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    .bg-text {
+      font-size: clamp(5rem, 18vw, 22rem);
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.03);
+      text-stroke: 1px rgba(255, 255, 255, 0.1);
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.08);
+      user-select: none;
+    }
+    .glass-card {
+      background: rgba(18, 18, 24, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.86), 
+                  0 0 40px -10px rgba(147, 51, 234, 0.15);
+    }
+    .avatar-glow {
+      box-shadow: 0 0 25px #a855f7, 0 0 50px rgba(168, 85, 247, 0.4);
+    }
+    .typing-cursor::after {
+      content: '|';
+      animation: blink 1s infinite;
+      color: #ef4444;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .bar-anim {
+      animation: bounce 1.2s infinite ease-in-out alternate;
+    }
+    @keyframes bounce {
+      0% { height: 4px; }
+      100% { height: 28px; }
+    }
+  </style>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center relative bg-black overflow-y-auto py-10">
 
-    <!-- FONDO AURORA AMBIENTAL -->
-    <div class="aurora-bg">
-        <div class="aurora-blob blob-1"></div>
-        <div class="aurora-blob blob-2"></div>
-        <div class="aurora-blob blob-3"></div>
-        <div class="aurora-blob blob-4"></div>
+  <!-- Fondo Neon & Texto 3D -->
+  <div class="fixed inset-0 pointer-events-none flex items-center justify-center overflow-hidden">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-red-600/20 rounded-full blur-[140px]"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-[140px]"></div>
+    <h1 class="bg-text select-none uppercase font-extrabold tracking-tighter">TORRES</h1>
+  </div>
+
+  <!-- Contenedor Principal -->
+  <div class="relative z-10 w-full max-w-md px-4">
+    
+    <!-- Modal de Configuración de ID de Discord -->
+    <div id="config-banner" class="mb-4 p-3 bg-purple-900/40 border border-purple-500/30 rounded-xl text-xs text-purple-200 flex items-center justify-between">
+      <span><i class="fa-brands fa-discord mr-2"></i> Estado de Discord: <strong id="discord-status-text">Conectando...</strong></span>
+      <button onclick="promptDiscordID()" class="px-2 py-1 bg-purple-600 hover:bg-purple-500 rounded text-white text-[10px] transition">Cambiar ID</button>
     </div>
 
-    <canvas id="canvas-bg"></canvas>
-
-    <!-- AUDIO OCULTO (20% VOLUMEN) -->
-    <audio id="bgMusic" loop src="cancion.mp3"></audio>
-
-    <!-- PANTALLA DE INICIO CON HUELLA DACTILAR -->
-    <div id="lock-screen">
-        <h1 class="lock-title">Para ti, mi amor</h1>
-        <div class="fingerprint-wrapper" id="fpWrap" onmousedown="startScan()" onmouseup="stopScan()" onmouseleave="stopScan()" ontouchstart="startScan()" ontouchend="stopScan()">
-            <svg class="fingerprint-svg" viewBox="0 0 100 100">
-                <path d="M 50 15 A 35 35 0 0 1 85 50 A 35 35 0 0 1 75 75" />
-                <path d="M 50 25 A 25 25 0 0 1 75 50 A 25 25 0 0 1 65 70" />
-                <path d="M 50 35 A 15 15 0 0 1 65 50 A 15 15 0 0 1 55 65" />
-                <path d="M 50 45 A 5 5 0 0 1 55 50" />
-                <path d="M 25 70 A 35 35 0 0 1 15 50 A 35 35 0 0 1 50 15" />
-                <path d="M 35 65 A 25 25 0 0 1 25 50 A 25 25 0 0 1 50 25" />
-                <path d="M 45 60 A 15 15 0 0 1 35 50 A 15 15 0 0 1 50 35" />
-            </svg>
-            <div class="scan-laser" id="laser"></div>
-        </div>
-        <p class="lock-subtitle" id="lockText">Mantén presionada la huella ♥</p>
+    <!-- Live indicator badge -->
+    <div class="flex justify-center mb-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/60 border border-white/10 backdrop-blur-md text-xs text-gray-300">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+        <span><strong id="live-views">4</strong> viendo ahora</span>
+      </div>
     </div>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <div class="container" id="mainContainer">
-        
-        <header>
-            <h1>Junior & Julieth</h1>
-            <p>Escribiendo nuestro amor día a día ✨</p>
-            <div class="badge-tag">🌹 Nuestra historia juntos desde el 15.09.2025</div>
-        </header>
-
-        <!-- DEDICATORIA ESPECIAL -->
-        <div class="card">
-            <h2>✨ Un Regalo Especial para Julieth</h2>
-            <div class="special-badge" onclick="toggleSpecialSecret()">
-                <div class="special-title">Para la persona que ilumina mis días</div>
-                <div class="special-desc">Hice esta página pensando en ti y en cada detalle de nuestro amor ❤️</div>
-                <p style="font-size:0.85rem; color:var(--accent); margin-top:10px;">[ Toca aquí para leer una nota especial ]</p>
-                <div class="special-secret" id="specialSecret">
-                    "Cada momento que comparto contigo es único. Quería dejar registrado este espacio para recordarte siempre lo importante que eres para mí." 🥰🌹
-                </div>
-            </div>
+    <!-- Glass Profile Card -->
+    <div class="glass-card rounded-3xl p-6 flex flex-col items-center text-center relative overflow-hidden">
+      
+      <!-- Avatar con Neón -->
+      <div class="relative mb-4 mt-2">
+        <div id="avatar-ring" class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-purple-500 via-indigo-500 to-pink-500 avatar-glow transition-all duration-500">
+          <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-full h-full object-cover rounded-full bg-neutral-900" alt="Avatar" />
         </div>
+        <span id="discord-status-dot" class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-gray-500 border-2 border-black" title="Estado"></span>
+      </div>
 
-        <!-- EL DIARIO DE NUESTRO AMOR -->
-        <div class="card">
-            <h2>🔮 El Diario de Nuestro Amor</h2>
-            <div class="phrase-box" style="border-style: solid; border-color: rgba(255, 42, 109, 0.65);">
-                <div style="font-size: 0.88rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px;" id="dailyHeader">Mensaje de Hoy</div>
-                <div class="phrase-text" id="dailyMsg" style="font-size: 1.18rem; min-height: auto;">Cargando pensamiento del día...</div>
-            </div>
+      <!-- User Title & Status -->
+      <h2 id="discord-username" class="text-xl font-bold tracking-wide text-white uppercase">TORRES LIVE</h2>
+      <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 mt-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-[11px] text-emerald-400">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        <span id="status-text">EN LÍNEA</span>
+      </div>
+
+      <!-- Main Action Button -->
+      <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full mt-5 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-900/40 transition-all hover:scale-[1.02] active:scale-[0.98]">
+        <i class="fa-solid fa-cart-shopping"></i> TORRES XITER
+      </a>
+
+      <!-- Description / Bio -->
+      <p class="text-xs text-gray-300 my-4 leading-relaxed px-2 font-light">
+        <span id="typed-bio"></span><span class="typing-cursor"></span>
+      </p>
+
+      <!-- Discord Presence / Activity Card -->
+      <div id="activity-box" class="w-full bg-black/40 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-purple-950/50 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
+          <i id="activity-icon" class="fa-solid fa-code text-lg"></i>
         </div>
-
-        <!-- GALERÍA POLAROID -->
-        <div class="card">
-            <h2>📸 Galería de Recuerdos Especiales</h2>
-            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:18px;">[ Toca una foto para descubrir el mensaje detrás ]</p>
-            <div class="polaroid-grid">
-                
-                <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
-                    <div class="polaroid-inner">
-                        <div class="polaroid-front">
-                            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=600&auto=format&fit=crop" alt="Recuerdo 1">
-                            <div class="caption">Noches de Chat 🌙</div>
-                        </div>
-                        <div class="polaroid-back">
-                            <p>"Esas conversaciones hasta tarde donde las horas se nos pasan volando."</p>
-                            <div class="date-tag">Siempre ✨</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
-                    <div class="polaroid-inner">
-                        <div class="polaroid-front">
-                            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600&auto=format&fit=crop" alt="Recuerdo 2">
-                            <div class="caption">Tu Sonrisa 💖</div>
-                        </div>
-                        <div class="polaroid-back">
-                            <p>"Ver tu sonrisa en fotos es mi momento favorito de cualquier día."</p>
-                            <div class="date-tag">Mi Favorito 🥰</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="polaroid-card" onclick="this.classList.toggle('flipped')">
-                    <div class="polaroid-inner">
-                        <div class="polaroid-front">
-                            <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?q=80&w=600&auto=format&fit=crop" alt="Recuerdo 3">
-                            <div class="caption">Nuestro Encuentro ✈️</div>
-                        </div>
-                        <div class="polaroid-back">
-                            <p>"Contando los días para ese abrazo apretado que tanto soñamos."</p>
-                            <div class="date-tag">Muy Pronto 🌹</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+        <div class="overflow-hidden">
+          <div id="activity-title" class="text-[11px] font-bold text-purple-300 truncate">Visual Studio Code</div>
+          <div id="activity-details" class="text-[10px] text-gray-400 truncate">Index.php:181039</div>
+          <div id="activity-state" class="text-[9px] text-gray-500 truncate">BrMods $30 Custom - iOS Panel Generator</div>
         </div>
+      </div>
 
-        <!-- RASPA Y GANA -->
-        <div class="card">
-            <h2>🎁 Rasca tu Sorpresa de Hoy</h2>
-            <div class="scratch-card" id="scratchCard" onclick="revealScratch()">
-                <p id="scratchCover" style="font-size:1.15rem; color:var(--secondary); font-weight:600;">✨ Toca aquí para descubrir tu regalo sorpresa de hoy ✨</p>
-                <div class="scratch-content" id="scratchContent">
-                    "🎟️ Cupón Válido Por: Un abrazo gigante que dure más de 5 minutos cuando nos veamos." ❤️🫂
-                </div>
-            </div>
+      <!-- Social Media Icons -->
+      <div class="flex items-center justify-center gap-3 w-full mb-4">
+        <a href="https://youtube.com" target="_blank" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition"><i class="fa-brands fa-youtube"></i></a>
+        <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition"><i class="fa-brands fa-discord"></i></a>
+        <a href="https://wa.me/" target="_blank" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="https://tiktok.com" target="_blank" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 flex items-center justify-center text-gray-300 hover:text-white transition"><i class="fa-brands fa-tiktok"></i></a>
+      </div>
+
+      <!-- Link Card -->
+      <div onclick="copyDiscordLink()" class="w-full bg-black/30 border border-white/5 hover:border-white/20 rounded-xl p-3 flex items-center justify-between cursor-pointer transition group mb-4">
+        <div class="flex items-center gap-3">
+          <i class="fa-brands fa-discord text-xl text-indigo-400"></i>
+          <div class="text-left">
+            <div class="text-xs font-semibold text-white">Tienda De Hacks</div>
+            <div class="text-[10px] text-gray-400 group-hover:text-gray-200">https://discord.gg/YGtZFwfY3U</div>
+          </div>
         </div>
+        <i class="fa-regular fa-copy text-xs text-gray-500 group-hover:text-white"></i>
+      </div>
 
-        <!-- GENERADOR DE DESEOS -->
-        <div class="card">
-            <h2>✨ Generador de Deseos Juntos</h2>
-            <div class="phrase-box">
-                <div class="phrase-text" id="wishDisplay">"Toca el botón para ver un plan o deseo que cumpliremos juntos..."</div>
-                <button class="btn-magic" onclick="generateWish()">🌟 Descubrir Deseo</button>
-            </div>
-        </div>
-
-        <!-- TE AMO EN IDIOMAS -->
-        <div class="card">
-            <h2>🌍 Te Amo en Todos los Idiomas</h2>
-            <div class="phrase-box">
-                <div class="phrase-text" id="langDisplay">"Je t'aime" (Francés 🇫🇷)</div>
-                <button class="btn-magic" onclick="nextLang()">🌐 Cambiar Idioma</button>
-            </div>
-        </div>
-
-        <!-- LÍNEA DE TIEMPO -->
-        <div class="card">
-            <h2>📖 Nuestra Historia de Amor</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">15 de Septiembre de 2025</div>
-                    <div class="timeline-title">El Comienzo de Algo Hermoso</div>
-                    <div class="timeline-desc">El día en que officially empezó nuestra bonita historia y nuestros días se llenaron de sonrisas.</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Todos los días</div>
-                    <div class="timeline-title">Nuestras Noches de Mensajes</div>
-                    <div class="timeline-desc">Compartir nuestro día a día, trasnochar platicando y ser el refugio del otro a la distancia.</div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Muy Pronto</div>
-                    <div class="timeline-title">El Abrazo Tan Esperado</div>
-                    <div class="timeline-desc">El momento en que por fin estemos frente a frente para no soltarnos jamás.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CONTADOR DE TIEMPO -->
-        <div class="card">
-            <h2>⏳ Tiempo Escribiendo Nuestro Amor</h2>
-            <p style="text-align:center; color:var(--text-sub); font-size:0.95rem; margin-bottom:14px;">Desde aquel 15 de septiembre de 2025:</p>
-            <div class="counter-grid">
-                <div class="counter-box"><span id="days">0</span><label>Días</label></div>
-                <div class="counter-box"><span id="hours">0</span><label>Horas</label></div>
-                <div class="counter-box"><span id="minutes">0</span><label>Minutos</label></div>
-                <div class="counter-box"><span id="seconds">0</span><label>Segundos</label></div>
-            </div>
-        </div>
-
-        <!-- GENERADOR DE RAZONES -->
-        <div class="card">
-            <h2>💖 ¿Por qué eres tan especial para mí?</h2>
-            <div class="phrase-box">
-                <div class="phrase-text" id="reasonDisplay">"Toca el botón para descubrir una razón de por qué te amo tanto..."</div>
-                <button class="btn-magic" onclick="generateReason()">✨ Descubrir Razón</button>
-            </div>
-        </div>
-
-        <!-- CARTAS ABRIR CUANDO... -->
-        <div class="card">
-            <h2>💌 Cartas "Abrir Cuando..."</h2>
-            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:22px;">Haz clic en cada sobre cuando lo necesites:</p>
-            <div class="envelope-grid">
-                <div class="envelope-card" onclick="toggleEnvelope(this)">
-                    <div class="envelope-icon">🥺</div>
-                    <div class="envelope-title">Cuando me extrañes</div>
-                    <div class="envelope-text">Recuerda que estoy a solo un mensaje de distancia y que mi corazón siempre está pensando en ti. ❤️</div>
-                </div>
-                <div class="envelope-card" onclick="toggleEnvelope(this)">
-                    <div class="envelope-icon">😔</div>
-                    <div class="envelope-title">Cuando tengas un mal día</div>
-                    <div class="envelope-text">Toma un respiro profundo. Eres una persona maravillosa y fuerte. Yo siempre estaré aquí para apoyarte. 🌹</div>
-                </div>
-                <div class="envelope-card" onclick="toggleEnvelope(this)">
-                    <div class="envelope-icon">🌙</div>
-                    <div class="envelope-title">Cuando no puedas dormir</div>
-                    <div class="envelope-text">Cierra los ojos y piensa en todos los abrazos y momentos bonitos que nos esperan juntos. Dulces sueños. ✨</div>
-                </div>
-                <div class="envelope-card" onclick="toggleEnvelope(this)">
-                    <div class="envelope-icon">🥰</div>
-                    <div class="envelope-title">Cuando quieras sonreír</div>
-                    <div class="envelope-text">Eres la persona que más sonrisas me saca al día, ¡así que hoy me toca a mí sacarte una a ti! 💕</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CANDADO DEL AMOR -->
-        <div class="card">
-            <h2>🔒 El Candado de Promesas de Junior & Julieth</h2>
-            <div class="lock-container">
-                <div class="lock-icon" id="lockIcon" onclick="unlockSecret()">🔒</div>
-                <p style="color:var(--text-sub); font-size:0.9rem;">Toca el candado para abrir nuestro mensaje de compromiso eterno</p>
-                <div class="lock-secret" id="lockSecret">
-                    "Te prometo seguir estando presente en cada mensaje, escucharte siempre y estar a tu lado en cada paso hasta que por fin podamos abrazarnos." ❤️
-                </div>
-            </div>
-        </div>
-
-        <!-- TRIVIA -->
-        <div class="card">
-            <h2>🎮 Trivia: ¿Qué tanto nos conocemos?</h2>
-            <div class="quiz-box">
-                <p style="font-size:1.1rem; margin-bottom:15px;">¿Qué es lo mejor de nuestras noches de mensajes?</p>
-                <button class="quiz-btn" onclick="answerQuiz('¡Trasnochar juntos riéndonos de todo!')">A) Trasnochar juntos riéndonos de todo 😂</button>
-                <button class="quiz-btn" onclick="answerQuiz('¡Contarnos nuestro día con cada detalle!')">B) Contarnos nuestro día con cada detalle 📝</button>
-                <button class="quiz-btn" onclick="answerQuiz('¡Desearnos buenas noches antes de dormir!')">C) Desearnos buenas noches antes de dormir 🌙</button>
-                <p id="quizResult" style="margin-top:15px; font-weight:bold; color:var(--accent);"></p>
-            </div>
-        </div>
-
-        <!-- BUCKET LIST -->
-        <div class="card">
-            <h2>✨ Lista para Nuestro Primer Día Juntos</h2>
-            <p style="text-align:center; color:var(--text-sub); font-size:0.9rem; margin-bottom:15px;">Marcaremos juntos cada logro:</p>
-            <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
-            <ul class="bucket-list">
-                <li><input type="checkbox" onchange="updateProgress()"> Darte ese abrazo tan esperado y no soltarte.</li>
-                <li><input type="checkbox" onchange="updateProgress()"> Mirarte a los ojos por primera vez en persona.</li>
-                <li><input type="checkbox" onchange="updateProgress()"> Salir a comer juntos y tomar nuestra primera foto.</li>
-                <li><input type="checkbox" onchange="updateProgress()"> Caminar de la mano platicando sin prisas.</li>
-            </ul>
-        </div>
-
-        <!-- CARTA -->
-        <div class="card">
-            <h2>📜 Para Mi Julieth</h2>
-            <div class="letter-container">
-                "Julieth, cada mensaje tuyo y cada momento compartiendo nuestro día a día me demuestra que nuestro amor es verdaderamente especial. Aunque exista distancia física, lo que sentimos borra cualquier espacio. Con todo mi amor, Junior."
-            </div>
-        </div>
-
-        <footer>
-            Creado con todo el amor de Junior para Julieth ❤️
-        </footer>
+      <!-- Footer Info -->
+      <div class="flex items-center justify-between w-full text-[11px] text-gray-400 border-t border-white/5 pt-3">
+        <span class="flex items-center gap-1"><i class="fa-regular fa-eye"></i> <span id="view-count">53</span> vistas</span>
+        <button onclick="shareProfile()" class="hover:text-white transition flex items-center gap-1"><i class="fa-solid fa-share-nodes"></i> compartir</button>
+        <span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> <span id="live-clock">18:10:39</span></span>
+      </div>
 
     </div>
 
-    <script>
-        // ESCANEO HUELLA
-        let scanTimer = null;
-        const laser = document.getElementById('laser');
-        const lockText = document.getElementById('lockText');
-        const lockScreen = document.getElementById('lock-screen');
-        const mainContainer = document.getElementById('mainContainer');
-        const fpSvg = document.querySelector('.fingerprint-svg');
+    <!-- Audio Player Visualizer Bar -->
+    <div class="mt-4 flex items-center justify-center gap-4 bg-black/60 backdrop-blur-md border border-white/10 rounded-full py-2 px-6">
+      <div id="equalizer" class="flex items-end gap-1 h-6">
+        <span class="w-1 bg-red-500 rounded-full bar-anim" style="animation-delay: 0.1s"></span>
+        <span class="w-1 bg-red-500 rounded-full bar-anim" style="animation-delay: 0.3s"></span>
+        <span class="w-1 bg-red-500 rounded-full bar-anim" style="animation-delay: 0.2s"></span>
+        <span class="w-1 bg-red-500 rounded-full bar-anim" style="animation-delay: 0.4s"></span>
+      </div>
+      <button id="audio-toggle" onclick="toggleAudio()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-xs transition">
+        <i class="fa-solid fa-pause"></i>
+      </button>
+    </div>
 
-        function startScan() {
-            laser.style.animation = 'scanAnim 1.2s infinite ease-in-out';
-            fpSvg.style.stroke = '#ff2a6d';
-            lockText.innerText = "Verificando huella de amor...";
-            lockText.style.color = "#ff85a1";
+  </div>
 
-            scanTimer = setTimeout(() => {
-                fpSvg.style.stroke = '#1db954';
-                lockText.innerText = "¡Huella de Julieth Aceptada! ❤️";
-                lockText.style.color = "#1db954";
-                
-                setTimeout(() => {
-                    lockScreen.classList.add('unlocked');
-                    mainContainer.classList.add('show');
-                    
-                    playAudioAuto();
-                    initAutoNotifications();
-                    loadDailyMessage();
-                }, 600);
-            }, 1800);
+  <!-- Lanyard / Discord API Integration -->
+  <script>
+    // Tu ID de Discord (Configurado por defecto o personalizable)
+    let DISCORD_ID = localStorage.getItem('discord_user_id') || 'YOUR_DISCORD_USER_ID';
+
+    function promptDiscordID() {
+      const id = prompt("Ingresa tu Discord User ID (ID de usuario de 18-19 dígitos):", DISCORD_ID);
+      if(id) {
+        localStorage.setItem('discord_user_id', id.trim());
+        DISCORD_ID = id.trim();
+        connectLanyard();
+      }
+    }
+
+    // WebSocket Lanyard API
+    let lanyardWS;
+    function connectLanyard() {
+      if (lanyardWS) lanyardWS.close();
+      
+      const statusText = document.getElementById('discord-status-text');
+      statusText.innerText = "Conectando...";
+
+      lanyardWS = new WebSocket('wss://api.lanyard.rest/socket');
+
+      lanyardWS.onopen = () => {
+        lanyardWS.send(JSON.stringify({
+          op: 2,
+          d: { subscribe_to_id: DISCORD_ID }
+        }));
+      };
+
+      lanyardWS.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.t === 'INIT_STATE' || data.t === 'PRESENCE_UPDATE') {
+          updateDiscordPresence(data.d);
+          statusText.innerText = "Conectado (" + DISCORD_ID + ")";
         }
+      };
 
-        function stopScan() {
-            if (scanTimer) {
-                clearTimeout(scanTimer);
-                scanTimer = null;
-            }
-            if (!lockScreen.classList.contains('unlocked')) {
-                laser.style.animation = 'none';
-                fpSvg.style.stroke = '#ffffff';
-                lockText.innerText = "Mantén presionada la huella ♥";
-                lockText.style.color = "var(--text-sub)";
-            }
-        }
+      lanyardWS.onerror = () => {
+        statusText.innerText = "ID No Encontrado / Error";
+      };
+    }
 
-        // DIARIO DE NUESTRO AMOR
-        const dailyMessages = [
-            { day: "Domingo ☀️", msg: "\"Cerrando la semana dando gracias por tenerte a mi lado. Te amo infinitamente.\"" },
-            { day: "Lunes 💖", msg: "\"Iniciando la semana pensando en ti. Eres mi motor favorito para empezar con una sonrisa.\"" },
-            { day: "Martes 🌸", msg: "\"Paso a recordarte que hoy y siempre eres lo más bonito que me ha pasado.\"" },
-            { day: "Miércoles ✨", msg: "\"Mitad de semana y mi corazón sigue lleno de ganas de darte ese abrazo tan esperado.\"" },
-            { day: "Jueves 🌹", msg: "\"Cada día que pasa es un día menos para estar juntos. Falta muy poco, mi vida.\"" },
-            { day: "Viernes 🎉", msg: "\"¡Llegó el fin de semana! Que sea un día hermoso para ti, mi reina.\"" },
-            { day: "Sábado 🌙", msg: "\"Un sábado perfecto para recordarte cuánto me encantas y lo feliz que me haces.\"" }
-        ];
+    function updateDiscordPresence(data) {
+      if (!data) return;
 
-        function loadDailyMessage() {
-            const today = new Date().getDay();
-            document.getElementById('dailyHeader').innerText = `Mensaje de hoy (${dailyMessages[today].day})`;
-            document.getElementById('dailyMsg').innerText = dailyMessages[today].msg;
-        }
+      // Avatar
+      const avatarImg = document.getElementById('discord-avatar');
+      if (data.discord_user.avatar) {
+        avatarImg.src = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=256`;
+      }
 
-        // AUDIO AL 20%
-        function playAudioAuto() {
-            const music = document.getElementById('bgMusic');
-            music.volume = 0.2;
-            music.play().catch(err => {
-                console.log("El navegador requiere interacción previa:", err);
-            });
-        }
+      // Username
+      document.getElementById('discord-username').innerText = data.discord_user.global_name || data.discord_user.username;
 
-        // DESEOS
-        const wishes = [
-            "Ir por un helado y caminar juntos riéndonos de cualquier tontería.",
-            "Tener una tarde completa para ver películas abrazados sin ver el reloj.",
-            "Tomarnos miles de fotos juntos para llenar un álbum completo.",
-            "Viajar a un lugar bonito y tomarnos de la mano frente al atardecer."
-        ];
-        function generateWish() {
-            const w = wishes[Math.floor(Math.random() * wishes.length)];
-            document.getElementById('wishDisplay').innerText = `"${w}"`;
-        }
+      // Status Indicator Dot & Text
+      const statusDot = document.getElementById('discord-status-dot');
+      const statusText = document.getElementById('status-text');
+      const statusColors = {
+        online: 'bg-emerald-500',
+        idle: 'bg-amber-500',
+        dnd: 'bg-red-500',
+        offline: 'bg-gray-500'
+      };
+      statusDot.className = `absolute bottom-1 right-1 w-5 h-5 rounded-full border-2 border-black ${statusColors[data.discord_status] || 'bg-gray-500'}`;
+      statusText.innerText = data.discord_status === 'offline' ? 'DESCONECTADO' : data.discord_status.toUpperCase();
 
-        // NOTIFICACIONES
-        function initAutoNotifications() {
-            if ("Notification" in window) {
-                if (Notification.permission === "granted") {
-                    startScheduledNotifications();
-                } else if (Notification.permission !== "denied") {
-                    Notification.requestPermission().then(permission => {
-                        if (permission === "granted") {
-                            new Notification("Junior & Julieth ❤️", {
-                                body: "¡Notificaciones automáticas activadas! Te acompañaré con mensajes durante todo el día. 🥰"
-                            });
-                            startScheduledNotifications();
-                        }
-                    });
-                }
-            }
-        }
+      // Activity / Rich Presence (VS Code, Games, Custom Status)
+      if (data.activities && data.activities.length > 0) {
+        const act = data.activities.find(a => a.type === 0) || data.activities[0];
+        document.getElementById('activity-title').innerText = act.name || 'En actividad';
+        document.getElementById('activity-details').innerText = act.details || act.state || 'Activo en Discord';
+        document.getElementById('activity-state').innerText = act.state || 'En ejecución';
+      }
+    }
 
-        function startScheduledNotifications() {
-            setInterval(() => {
-                const now = new Date();
-                const hours = now.getHours();
-                const minutes = now.getMinutes();
+    // Typing Animation
+    const fullBioText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención ga";
+    let bioIdx = 0;
+    function typeBio() {
+      if (bioIdx < fullBioText.length) {
+        document.getElementById("typed-bio").innerHTML += fullBioText.charAt(bioIdx);
+        bioIdx++;
+        setTimeout(typeBio, 35);
+      }
+    }
 
-                if (minutes === 0) {
-                    if (hours === 8) {
-                        new Notification("¡Buenos días, mi amor! ☀️", { 
-                            body: "Espero que tengas un día maravilloso. Te amo infinitamente. ❤️" 
-                        });
-                    }
-                    else if (hours === 11) {
-                        new Notification("Paso a recordarte... ☕✨", { 
-                            body: "Que eres la persona más hermosa del mundo y mi pensamiento favorito del día." 
-                        });
-                    }
-                    else if (hours === 13) {
-                        new Notification("Recordatorio con amor 🍽️💕", { 
-                            body: "Paso a recordarte que almuerces rico y tengas una linda tarde. ¡Te mando un beso!" 
-                        });
-                    }
-                    else if (hours === 17) {
-                        new Notification("Pensando en ti ✨🥰", { 
-                            body: "Solo quería recordarte lo especial que eres para mí y lo mucho que me alegras la vida." 
-                        });
-                    }
-                    else if (hours === 20) {
-                        new Notification("Un detalle para mi reina 🌹💖", { 
-                            body: "Gracias por hacer que cada día sea más bonito. Ya falta menos para darnos ese abrazo." 
-                        });
-                    }
-                    else if (hours === 22) {
-                        new Notification("Buenas noches, mi vida 🌙", { 
-                            body: "Que tengas los sueños más dulces. Un abrazo fuerte a la distancia. ✨" 
-                        });
-                    }
-                }
-            }, 60000);
-        }
+    // Live Clock & View Counter
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
+    }
 
-        // RASPA Y GANA
-        function revealScratch() {
-            document.getElementById('scratchCover').style.display = 'none';
-            document.getElementById('scratchContent').style.display = 'block';
-        }
+    // Copy & Share Actions
+    function copyDiscordLink() {
+      navigator.clipboard.writeText("https://discord.gg/YGtZFwfY3U");
+      alert("¡Enlace de Discord copiado al portapapeles!");
+    }
 
-        // IDIOMAS
-        const langs = [
-            "\"Je t'aime\" (Francés 🇫🇷)",
-            "\"Ti amo\" (Italiano 🇮🇹)",
-            "\"I love you\" (Inglés 🇬🇧)",
-            "\"Ich liebe dich\" (Alemán 🇩🇪)",
-            "\"Aishiteru\" (Japonés 🇯🇵)",
-            "\"Saranghae\" (Coreano 🇰🇷)",
-            "\"Eu te amo\" (Portugués 🇧🇷)",
-            "\"Ya tebya lyublyu\" (Ruso 🇷🇺)"
-        ];
-        let langIdx = 0;
-        function nextLang() {
-            langIdx = (langIdx + 1) % langs.length;
-            document.getElementById('langDisplay').innerText = langs[langIdx];
-        }
+    function shareProfile() {
+      if (navigator.share) {
+        navigator.share({ title: 'TORRES LIVE', url: window.location.href });
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+        alert("¡Enlace de la página copiado!");
+      }
+    }
 
-        // NOTA ESPECIAL
-        function toggleSpecialSecret() {
-            const secret = document.getElementById('specialSecret');
-            secret.style.display = secret.style.display === 'block' ? 'none' : 'block';
-        }
-
-        // CONTADOR DE TIEMPO
-        const startDate = new Date(2025, 8, 15, 0, 0, 0).getTime();
-        function updateCounter() {
-            const now = new Date().getTime();
-            const diff = now - startDate;
-            if (diff > 0) {
-                document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-                document.getElementById('hours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                document.getElementById('minutes').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                document.getElementById('seconds').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
-            }
-        }
-        setInterval(updateCounter, 1000); 
-        updateCounter();
-
-        // RAZONES
-        const reasons = [
-            "Porque con solo ver una notificación tuya se me ilumina el día.",
-            "Porque me encanta cómo nos entendemos y nos reímos de todo.",
-            "Porque haces que los días ordinarios se sientan especiales.",
-            "Porque admiro tu forma de ser y la ternura de tus mensajes.",
-            "Porque a tu lado siento una paz y una felicidad incomparables.",
-            "Porque eres mi persona favorita para hablar antes de dormir.",
-            "Porque me haces querer ser mejor persona cada día."
-        ];
-        function generateReason() {
-            const r = reasons[Math.floor(Math.random() * reasons.length)];
-            document.getElementById('reasonDisplay').innerText = `"${r}"`;
-        }
-
-        // CANDADO
-        function unlockSecret() {
-            document.getElementById('lockIcon').innerText = '🔓';
-            document.getElementById('lockSecret').style.display = 'block';
-        }
-
-        // TRIVIA
-        function answerQuiz(optionText) {
-            document.getElementById('quizResult').innerText = "¡Totalmente! " + optionText + " 💕";
-        }
-
-        // BUCKET LIST
-        function updateProgress() {
-            const boxes = document.querySelectorAll('.bucket-list input');
-            let checked = 0;
-            boxes.forEach(b => { if (b.checked) checked++; });
-            const pct = (checked / boxes.length) * 100;
-            document.getElementById('progressFill').style.width = pct + '%';
-        }
-
-        // SOBRES
-        function toggleEnvelope(card) {
-            const text = card.querySelector('.envelope-text');
-            const isVisible = text.style.display === 'block';
-            text.style.display = isVisible ? 'none' : 'block';
-            card.querySelector('.envelope-icon').innerText = isVisible ? '✉️' : '📩';
-        }
-
-        // CORAZONES
-        document.addEventListener('click', (e) => {
-            spawnHeart(e.clientX, e.clientY);
-        });
-
-        function spawnHeart(x, y) {
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart';
-            heart.innerText = ['❤️', '💖', '✨', '💕'][Math.floor(Math.random() * 4)];
-            heart.style.left = x + 'px';
-            heart.style.top = y + 'px';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 1200);
-        }
-
-        // PARTÍCULAS
-        const canvas = document.getElementById('canvas-bg');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeCanvas); 
-        resizeCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedY = Math.random() * 0.8 + 0.3;
-                this.opacity = Math.random() * 0.5 + 0.2;
-            }
-            update() {
-                this.y -= this.speedY;
-                if (this.y < 0) { this.y = canvas.height; this.x = Math.random() * canvas.width; }
-            }
-            draw() {
-                ctx.fillStyle = `rgba(255, 180, 200, ${this.opacity})`;
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
-            }
-        }
-        for (let i = 0; i < 50; i++) particles.push(new Particle());
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => { p.update(); p.draw(); });
-            requestAnimationFrame(animate);
-        }
-        animate();
-    </script>
+    // Init
+    window.addEventListener('DOMContentLoaded', () => {
+      typeBio();
+      setInterval(updateClock, 1000);
+      updateClock();
+      connectLanyard();
+    });
+  </script>
 </body>
 </html>
