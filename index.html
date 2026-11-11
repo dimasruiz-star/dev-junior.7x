@@ -81,14 +81,14 @@
         <div class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-purple-500 via-indigo-500 to-pink-500 avatar-glow transition-all duration-500">
           <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-full h-full object-cover rounded-full bg-neutral-900" alt="Avatar" />
         </div>
-        <span class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-black" title="Estado"></span>
+        <span id="discord-status-dot" class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-gray-500 border-2 border-black" title="Estado"></span>
       </div>
 
       <!-- User Title & Status -->
-      <h2 class="text-xl font-bold tracking-wide text-white uppercase">NAXAREES7</h2>
+      <h2 id="discord-username" class="text-xl font-bold tracking-wide text-white uppercase">NAXAREES7</h2>
       <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 mt-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-[11px] text-emerald-400">
         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-        <span>EN LÍNEA</span>
+        <span id="status-text">CONECTANDO...</span>
       </div>
 
       <!-- Main Action Button -->
@@ -101,15 +101,15 @@
         <span id="typed-bio"></span><span class="typing-cursor"></span>
       </p>
 
-      <!-- Actividad Fija Estática (Visual Studio Code) -->
-      <div class="w-full bg-black/40 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
+      <!-- Dynamic Discord Activity Card (VS Code / Games / Apps) -->
+      <div id="activity-box" class="w-full bg-black/40 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
         <div class="w-10 h-10 rounded-xl bg-purple-950/50 border border-purple-500/20 flex items-center justify-center text-purple-400 shrink-0">
-          <i class="fa-solid fa-code text-lg"></i>
+          <i id="activity-icon" class="fa-solid fa-code text-lg"></i>
         </div>
         <div class="overflow-hidden">
-          <div class="text-[11px] font-bold text-purple-300 truncate">Visual Studio Code</div>
-          <div class="text-[10px] text-gray-400 truncate">Index.php:181039</div>
-          <div class="text-[9px] text-gray-500 truncate">BrMods $30 Custom - iOS Panel Generator</div>
+          <div id="activity-title" class="text-[11px] font-bold text-purple-300 truncate">Visual Studio Code</div>
+          <div id="activity-details" class="text-[10px] text-gray-400 truncate">Index.php:181039</div>
+          <div id="activity-state" class="text-[9px] text-gray-500 truncate">BrMods $30 Custom - iOS Panel Generator</div>
         </div>
       </div>
 
@@ -158,23 +158,74 @@
   </div>
 
   <script>
-    // Tu ID de Discord guardado directamente en el código de forma interna
     const DISCORD_ID = '1506432227767226398';
+    let lanyardWS;
 
-    // Cargar la foto de perfil en segundo plano desde la API
-    function cargarFotoPerfil() {
-      fetch(`https://api.lanyard.rest/v1/users/${DISCORD_ID}`)
-        .then(res => res.json())
-        .then(res => {
-          if(res.success && res.data.discord_user.avatar) {
-            const avatarUrl = `https://cdn.discordapp.com/avatars/${DISCORD_ID}/${res.data.discord_user.avatar}.png?size=256`;
-            document.getElementById('discord-avatar').src = avatarUrl;
-          }
-        })
-        .catch(() => {});
+    function connectLanyard() {
+      if (lanyardWS) lanyardWS.close();
+
+      lanyardWS = new WebSocket('wss://api.lanyard.rest/socket');
+
+      lanyardWS.onopen = () => {
+        lanyardWS.send(JSON.stringify({
+          op: 2,
+          d: { subscribe_to_id: DISCORD_ID }
+        }));
+      };
+
+      lanyardWS.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.t === 'INIT_STATE' || data.t === 'PRESENCE_UPDATE') {
+          updateDiscordPresence(data.d);
+        }
+      };
+
+      lanyardWS.onclose = () => {
+        setTimeout(connectLanyard, 5000);
+      };
     }
 
-    // Animación de escritura de la Bio
+    function updateDiscordPresence(data) {
+      if (!data) return;
+
+      // Update Avatar
+      const avatarImg = document.getElementById('discord-avatar');
+      if (data.discord_user && data.discord_user.avatar) {
+        avatarImg.src = `https://cdn.discordapp.com/avatars/${data.discord_user.id}/${data.discord_user.avatar}.png?size=256`;
+      }
+
+      // Update Status Indicator
+      const statusDot = document.getElementById('discord-status-dot');
+      const statusText = document.getElementById('status-text');
+      const statusColors = {
+        online: 'bg-emerald-500',
+        idle: 'bg-amber-500',
+        dnd: 'bg-red-500',
+        offline: 'bg-gray-500'
+      };
+      statusDot.className = `absolute bottom-1 right-1 w-5 h-5 rounded-full border-2 border-black ${statusColors[data.discord_status] || 'bg-gray-500'}`;
+      statusText.innerText = data.discord_status === 'offline' ? 'DESCONECTADO' : data.discord_status.toUpperCase();
+
+      // Update Live Activity (VS Code, Games, Spotify, etc.)
+      if (data.activities && data.activities.length > 0) {
+        const act = data.activities.find(a => a.type === 0) || data.activities[0];
+        document.getElementById('activity-title').innerText = act.name || 'En actividad';
+        document.getElementById('activity-details').innerText = act.details || act.state || 'Activo';
+        document.getElementById('activity-state').innerText = act.state || 'En ejecución';
+
+        // Dynamic Icon Assignment
+        const iconElement = document.getElementById('activity-icon');
+        if (act.name.toLowerCase().includes('visual studio code')) {
+          iconElement.className = 'fa-solid fa-code text-lg';
+        } else if (act.name.toLowerCase().includes('spotify')) {
+          iconElement.className = 'fa-brands fa-spotify text-lg';
+        } else {
+          iconElement.className = 'fa-solid fa-gamepad text-lg';
+        }
+      }
+    }
+
+    // Typing Animation
     const fullBioText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención ga";
     let bioIdx = 0;
     function typeBio() {
@@ -185,13 +236,13 @@
       }
     }
 
-    // Reloj digital en vivo
+    // Clock
     function updateClock() {
       const now = new Date();
       document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
     }
 
-    // Funciones de copiar y compartir
+    // Actions
     function copyDiscordLink() {
       navigator.clipboard.writeText("https://discord.gg/YGtZFwfY3U");
       alert("¡Enlace de Discord copiado al portapapeles!");
@@ -207,7 +258,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      cargarFotoPerfil();
+      connectLanyard();
       typeBio();
       setInterval(updateClock, 1000);
       updateClock();
