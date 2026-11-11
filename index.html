@@ -59,25 +59,25 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    /* Tarjeta principal estilo Glassmorphism */
+    /* Tarjeta principal estilo Glassmorphism idéntica a la imagen */
     .glass-profile-card {
-      background: rgba(13, 13, 15, 0.85);
+      background: rgba(13, 13, 15, 0.88);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border: 1px solid rgba(255, 255, 255, 0.07);
       box-shadow: 
-        0 40px 80px rgba(0, 0, 0, 0.9),
+        0 40px 80px rgba(0, 0, 0, 0.95),
         0 0 50px rgba(120, 50, 255, 0.12);
     }
 
-    /* Anillo neón morado del avatar */
+    /* Anillo neón morado brillante alrededor del avatar */
     .avatar-ring-glow {
       box-shadow: 
-        0 0 20px #9333ea,
-        0 0 40px rgba(147, 51, 234, 0.4);
+        0 0 25px #a855f7,
+        0 0 50px rgba(168, 85, 247, 0.5);
     }
 
-    /* EFECTOS NEÓN AL PASAR EL MOUSE (HOVER) EN REDES SOCIALES */
+    /* EFECTOS NEÓN EN HOVER PARA REDES SOCIALES */
     .social-btn {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -110,17 +110,17 @@
       transform: translateY(-2px);
     }
 
-    /* Animación del ecualizador inferior de barras rojas */
+    /* Ecualizador inferior de barras rojas */
     .eq-bar {
       animation: eqBounce 1.2s infinite ease-in-out alternate;
     }
     @keyframes eqBounce {
       0% { height: 4px; }
-      100% { height: 28px; }
+      100% { height: 32px; }
     }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center relative bg-black overflow-y-auto py-8">
+<body class="min-h-screen flex flex-col items-center justify-center relative bg-black overflow-y-auto py-8">
 
   <!-- Audio de fondo -->
   <audio id="bg-music" loop>
@@ -147,7 +147,7 @@
   <!-- Contenedor Principal de la tarjeta -->
   <div class="relative z-10 w-full max-w-[420px] px-4">
 
-    <!-- Indicador superior -->
+    <!-- Indicador superior: 2 viendo ahora -->
     <div class="flex justify-center mb-3">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/80 border border-white/10 backdrop-blur-md text-[11px] text-gray-300">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
@@ -155,38 +155,38 @@
       </div>
     </div>
 
-    <!-- Tarjeta de Perfil -->
-    <div class="glass-profile-card rounded-[28px] p-6 flex flex-col items-center text-center relative overflow-hidden">
+    <!-- Tarjeta de Perfil Estructurada -->
+    <div class="glass-profile-card rounded-[32px] p-6 flex flex-col items-center text-center relative overflow-hidden">
       
-      <!-- Avatar con marco Neón Morado -->
-      <div class="relative mb-3 mt-1">
+      <!-- Avatar con Neón Morado -->
+      <div class="relative mb-4 mt-2">
         <div class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-purple-600 via-purple-400 to-indigo-500 avatar-ring-glow">
           <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-full h-full object-cover rounded-full bg-neutral-900" alt="Avatar" />
         </div>
         <span id="discord-status-dot" class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[#0d0d0f]"></span>
       </div>
 
-      <!-- Título de Usuario -->
-      <h2 id="discord-username" class="text-lg font-extrabold tracking-wider text-red-500 uppercase">NAXAREES LIVE</h2>
+      <!-- Título principal -->
+      <h2 id="discord-username" class="text-xl font-extrabold tracking-wider text-red-600 uppercase">NAXAREES LIVE</h2>
       
-      <!-- Insignia de Estado -->
-      <div class="inline-flex items-center gap-1.5 px-3 py-0.5 mt-1 rounded-full bg-black/60 border border-white/10 text-[10px] font-semibold text-gray-300 tracking-wide">
+      <!-- Estado -->
+      <div class="inline-flex items-center gap-1.5 px-3 py-0.5 mt-1.5 rounded-full bg-black/60 border border-white/10 text-[10px] font-semibold text-gray-300 tracking-wide">
         <span id="status-badge-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
         <span id="status-text">EN LÍNEA</span>
       </div>
 
-      <!-- Botón Principal -->
-      <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full mt-4 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-700 via-red-600 to-red-800 hover:from-red-600 hover:to-red-700 font-extrabold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-900/30 transition-transform active:scale-95">
+      <!-- Botón de compra / acción -->
+      <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full max-w-[280px] mt-5 py-2.5 px-4 rounded-xl bg-gradient-to-r from-red-700 via-red-600 to-red-800 hover:from-red-600 hover:to-red-700 font-extrabold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-red-900/40 border border-red-500/30 transition-transform active:scale-95">
         <i class="fa-solid fa-cart-shopping text-xs"></i> NAXAREES XITER
       </a>
 
-      <!-- Texto con Animación de Escribir y Borrar Loop -->
-      <p class="text-[11px] text-gray-300 my-4 leading-relaxed px-1 font-normal min-h-[36px]">
+      <!-- Texto con Animación de Escritura y Borrado Loop -->
+      <p class="text-[11px] text-gray-300 my-5 leading-relaxed px-2 font-normal min-h-[36px]">
         <span id="typed-text"></span><span class="typing-cursor"></span>
       </p>
 
-      <!-- Tarjeta de Actividad en vivo -->
-      <div class="w-full bg-[#0a0a0c]/80 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
+      <!-- Tarjeta de Actividad (VS Code / Juegos / Bio de Discord) -->
+      <div class="w-full bg-[#0a0a0c]/80 border border-white/5 rounded-2xl p-3 text-left mb-5 flex items-center gap-3">
         <img id="activity-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-9 h-9 rounded-full object-cover shrink-0 border border-white/10" alt="Icon" />
         <div class="overflow-hidden leading-tight">
           <div id="card-username" class="text-[11px] font-bold text-white tracking-wide uppercase">NAXAREES LIVE</div>
@@ -195,19 +195,19 @@
         </div>
       </div>
 
-      <!-- Iconos de Redes Sociales con efecto Neón Hover -->
-      <div class="flex items-center justify-center gap-3 w-full mb-4">
-        <a href="https://youtube.com" target="_blank" class="social-btn social-btn-yt w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300"><i class="fa-brands fa-youtube text-sm"></i></a>
-        <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="social-btn social-btn-dc w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300"><i class="fa-brands fa-discord text-sm"></i></a>
-        <a href="https://wa.me/" target="_blank" class="social-btn social-btn-wa w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300"><i class="fa-brands fa-whatsapp text-sm"></i></a>
-        <a href="https://tiktok.com" target="_blank" class="social-btn social-btn-tk w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300"><i class="fa-brands fa-tiktok text-sm"></i></a>
+      <!-- Iconos de Redes Sociales -->
+      <div class="flex items-center justify-center gap-3 w-full mb-5">
+        <a href="https://youtube.com" target="_blank" class="social-btn social-btn-yt w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300"><i class="fa-brands fa-youtube text-base"></i></a>
+        <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="social-btn social-btn-dc w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300"><i class="fa-brands fa-discord text-base"></i></a>
+        <a href="https://wa.me/" target="_blank" class="social-btn social-btn-wa w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300"><i class="fa-brands fa-whatsapp text-base"></i></a>
+        <a href="https://tiktok.com" target="_blank" class="social-btn social-btn-tk w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300"><i class="fa-brands fa-tiktok text-base"></i></a>
       </div>
 
-      <!-- Tarjeta Enlace: Tienda De Hacks -->
-      <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full bg-[#0a0a0c]/60 border border-white/5 hover:border-white/15 rounded-xl p-3 flex items-center justify-between transition-colors mb-4 group">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-300">
-            <i class="fa-brands fa-discord text-base"></i>
+      <!-- Tarjeta Enlace Enlace Directo a Discord -->
+      <a href="https://discord.gg/YGtZFwfY3U" target="_blank" class="w-full bg-[#0a0a0c]/60 border border-white/5 hover:border-white/15 rounded-2xl p-3 flex items-center justify-between transition-colors mb-5 group">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-gray-300">
+            <i class="fa-brands fa-discord text-lg"></i>
           </div>
           <div class="text-left">
             <div class="text-[11px] font-bold text-white">Tienda De Hacks</div>
@@ -217,28 +217,28 @@
         <i class="fa-solid fa-arrow-right text-[10px] text-gray-500 group-hover:text-white transition-colors"></i>
       </a>
 
-      <!-- SECCIÓN INFERIOR ORGANIZADA COMO EN LA CAPTURA -->
+      <!-- SECCIÓN INFERIOR PÍLDORAS -->
       <div class="flex flex-col items-center gap-2 w-full pt-1">
-        <!-- Píldora de Vistas -->
-        <div class="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full bg-[#0a0a0c]/80 border border-white/10 text-[11px] text-gray-300 font-medium min-w-[120px]">
+        <!-- Píldora Vistas -->
+        <div class="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full bg-[#0a0a0c]/80 border border-white/10 text-[11px] text-gray-300 font-medium min-w-[125px]">
           <i class="fa-regular fa-eye text-xs"></i> <span>66 vistas</span>
         </div>
 
-        <!-- Píldora de Compartir -->
-        <button onclick="shareProfile()" class="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full bg-[#0a0a0c]/80 border border-white/10 text-[11px] text-gray-300 font-medium hover:text-white hover:border-white/20 transition-colors min-w-[120px]">
+        <!-- Píldora Compartir -->
+        <button onclick="shareProfile()" class="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full bg-[#0a0a0c]/80 border border-white/10 text-[11px] text-gray-300 font-medium hover:text-white hover:border-white/20 transition-colors min-w-[125px]">
           <i class="fa-solid fa-share-nodes text-xs"></i> <span>compartir</span>
         </button>
 
         <!-- Reloj Digital -->
-        <div id="live-clock" class="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium mt-0.5">
-          <i class="fa-regular fa-clock"></i> <span>20:30:50</span>
+        <div id="live-clock" class="flex items-center gap-1.5 text-[11px] text-gray-400 font-medium mt-1">
+          <i class="fa-regular fa-clock"></i> <span>20:32:59</span>
         </div>
       </div>
 
     </div>
 
-    <!-- ECUALIZADOR ROJO INFERIOR EXACTO A LA IMAGEN -->
-    <div class="mt-6 flex items-center justify-center gap-1 h-7 cursor-pointer" onclick="toggleAudio()">
+    <!-- ECUALIZADOR ROJO INFERIOR EN EL FONDO -->
+    <div class="mt-6 flex items-end justify-center gap-1 h-8 cursor-pointer" onclick="toggleAudio()">
       <span class="w-1 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.1s"></span>
       <span class="w-1 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.3s"></span>
       <span class="w-1 bg-red-600 rounded-full eq-bar" style="animation-delay: 0.2s"></span>
