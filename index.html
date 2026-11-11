@@ -22,7 +22,7 @@
       transition: opacity 0.8s ease-out, visibility 0.8s;
     }
 
-    /* ANIMACIÓN DE CARGA EN LA LÍNEA ROJA */
+    /* Animación de carga en la línea roja */
     .loader-line-red {
       animation: loadLine 1.8s infinite ease-in-out;
     }
@@ -41,7 +41,7 @@
       }
     }
 
-    /* CURSOR PARPADEANTE DE ESCRITURA */
+    /* Cursor parpadeante de escritura */
     .typing-cursor::after {
       content: '|';
       color: #ef4444;
@@ -141,7 +141,7 @@
         <div class="w-24 h-24 rounded-full p-[3px] bg-gradient-to-tr from-purple-600 via-purple-400 to-indigo-500 avatar-ring-glow">
           <img id="discord-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-full h-full object-cover rounded-full bg-neutral-900" alt="Avatar" />
         </div>
-        <span id="discord-status-dot" class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-amber-500 border-2 border-[#0d0d0f]"></span>
+        <span id="discord-status-dot" class="absolute bottom-1 right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-[#0d0d0f]"></span>
       </div>
 
       <!-- Título de Usuario -->
@@ -149,8 +149,8 @@
       
       <!-- Insignia de Estado -->
       <div class="inline-flex items-center gap-1.5 px-3 py-0.5 mt-1 rounded-full bg-black/60 border border-white/10 text-[10px] font-semibold text-gray-300 tracking-wide">
-        <span id="status-badge-dot" class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
-        <span id="status-text">AUSENTE</span>
+        <span id="status-badge-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+        <span id="status-text">EN LÍNEA</span>
       </div>
 
       <!-- Botón Principal -->
@@ -163,11 +163,11 @@
         <span id="typed-text"></span><span class="typing-cursor"></span>
       </p>
 
-      <!-- Tarjeta de Actividad en vivo -->
+      <!-- Tarjeta de Actividad/Bio Integrada con Discord -->
       <div class="w-full bg-[#0a0a0c]/80 border border-white/5 rounded-2xl p-3 text-left mb-4 flex items-center gap-3">
         <img id="activity-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" class="w-9 h-9 rounded-full object-cover shrink-0 border border-white/10" alt="Icon" />
         <div class="overflow-hidden leading-tight">
-          <div id="card-username" class="text-[11px] font-bold text-white tracking-wide uppercase">NAXAREES7</div>
+          <div id="card-username" class="text-[11px] font-bold text-white tracking-wide uppercase">NAXAREES LIVE</div>
           <div id="card-discord-bio" class="text-[9px] text-gray-400 mt-0.5 uppercase tracking-wider hidden"></div>
           <div id="card-discord-time" class="text-[9px] text-gray-500 mt-0.5 font-mono hidden"></div>
         </div>
@@ -195,9 +195,9 @@
 
       <!-- Pie de página -->
       <div class="flex items-center justify-between w-full text-[10px] text-gray-400 border-t border-white/5 pt-3 font-medium">
-        <span class="flex items-center gap-1.5"><i class="fa-regular fa-eye"></i> 58 vistas</span>
+        <span class="flex items-center gap-1.5"><i class="fa-regular fa-eye"></i> 64 vistas</span>
         <span class="flex items-center gap-1.5 cursor-pointer hover:text-white"><i class="fa-solid fa-share-nodes"></i> compartir</span>
-        <span class="flex items-center gap-1.5"><i class="fa-regular fa-clock"></i> 19:50:45</span>
+        <span id="live-clock" class="flex items-center gap-1.5"><i class="fa-regular fa-clock"></i> 20:22:14</span>
       </div>
 
     </div>
@@ -221,7 +221,7 @@
   <script>
     const DISCORD_ID = '1506432227767226398';
 
-    // TEXTO A ESCRIBIR EN LA BIO SUPERIOR
+    // Texto de la Bio
     const bioText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención garantizada.";
     let charIndex = 0;
 
@@ -229,7 +229,7 @@
       if (charIndex < bioText.length) {
         document.getElementById("typed-text").innerHTML += bioText.charAt(charIndex);
         charIndex++;
-        setTimeout(typeWriter, 40);
+        setTimeout(typeWriter, 35);
       }
     }
 
@@ -256,9 +256,13 @@
       }
     }
 
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-clock').innerHTML = `<i class="fa-regular fa-clock"></i> ${now.toTimeString().split(' ')[0]}`;
+    }
+
     let activityTimerInterval = null;
 
-    // Formatear el tiempo transcurrido en MM:SS o HH:MM:SS
     function formatDuration(startTimeMs) {
       const diffSecs = Math.floor((Date.now() - startTimeMs) / 1000);
       const hours = Math.floor(diffSecs / 3600);
@@ -291,10 +295,10 @@
 
             // 2. Nombre de usuario
             const username = (data.discord_user.global_name || data.discord_user.username).toUpperCase();
-            document.getElementById('discord-username').innerText = username;
+            document.getElementById('discord-username').innerText = "NAXAREES LIVE";
             document.getElementById('card-username').innerText = username;
 
-            // 3. Actividad con "Jugando a..." y contador de tiempo
+            // 3. Actividad & Biografía
             const bioContainer = document.getElementById('card-discord-bio');
             const timeContainer = document.getElementById('card-discord-time');
             
@@ -307,11 +311,9 @@
             }
 
             if (gameActivity && gameActivity.name) {
-              // Si es un juego o aplicación
               bioContainer.innerText = `JUGANDO A ${gameActivity.name.toUpperCase()}`;
               bioContainer.classList.remove('hidden');
 
-              // Si Discord envía el timestamp de inicio (timestamps.start)
               if (gameActivity.timestamps && gameActivity.timestamps.start) {
                 const startTime = gameActivity.timestamps.start;
                 timeContainer.innerText = formatDuration(startTime);
@@ -323,17 +325,15 @@
               }
             } 
             else if (data.kv && data.kv.bio) {
-              // Si está desconectado pero tiene Bio en Lanyard KV
               bioContainer.innerText = data.kv.bio;
               bioContainer.classList.remove('hidden');
             } 
             else {
-              // Si no hay actividad ni bio, oculta la línea inferior para dejar solo el nombre
               bioContainer.innerText = "";
               bioContainer.classList.add('hidden');
             }
 
-            // 4. Estados (Online, Idle, DND, Offline)
+            // 4. Estado (Online, Idle, DND, Offline)
             const statusDot = document.getElementById('discord-status-dot');
             const statusBadgeDot = document.getElementById('status-badge-dot');
             const statusText = document.getElementById('status-text');
@@ -359,7 +359,8 @@
     window.addEventListener('DOMContentLoaded', () => {
       obtenerDatosDiscord();
       typeWriter();
-      setInterval(obtenerDatosDiscord, 15000); // Re-verificar la API cada 15 segundos
+      setInterval(updateClock, 1000);
+      updateClock();
     });
   </script>
 
