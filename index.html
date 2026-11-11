@@ -10,13 +10,14 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
     
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #030303;
-      color: #ffffff;
-      overflow-x: hidden;
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
+      background-color: #030303;
+      font-family: 'Inter', sans-serif;
+      color: #ffffff;
+      overflow-x: hidden;
     }
 
     /* Pantalla de entrada Click to Enter */
@@ -47,7 +48,30 @@
       50% { opacity: 0; }
     }
 
-    /* Texto 3D de fondo NAXAREES */
+    /* ANIMACIÓN DE PARTÍCULAS ROJAS DE FONDO */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.7);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+      animation: floatParticle linear infinite;
+    }
+
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(100vh) scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* Texto 3D gigante de fondo NAXAREES */
     .bg-text-naxarees {
       font-size: clamp(3rem, 11vw, 12rem);
       font-weight: 900;
@@ -79,7 +103,7 @@
         0 0 50px rgba(168, 85, 247, 0.5);
     }
 
-    /* Efectos neón en redes sociales */
+    /* EFECTOS NEÓN EN HOVER PARA REDES SOCIALES */
     .social-btn {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -142,6 +166,9 @@
       <div class="loader-line-red absolute top-0 h-full bg-red-600 shadow-[0_0_8px_#ef4444]"></div>
     </div>
   </div>
+
+  <!-- CAPA DE PARTÍCULAS ROJAS FLOTANTES -->
+  <div id="particle-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
 
   <!-- FONDO NEÓN & TEXTO 3D NAXAREES CENTRADO -->
   <div class="fixed inset-0 pointer-events-none flex items-center justify-center overflow-hidden z-0">
@@ -272,8 +299,25 @@
   </div>
 
   <script>
-    const DISCORD_ID = '1506432227767226398';
+    const DISCORD_ID = '';
     const music = document.getElementById('bg-music');
+
+    // Generador de partículas rojas flotantes
+    function createParticles() {
+      const container = document.getElementById('particle-container');
+      const particleCount = 35;
+      for (let i = 0; i < particleCount; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        const size = Math.random() * 4 + 2;
+        p.style.width = `${size}px`;
+        p.style.height = `${size}px`;
+        p.style.left = `${Math.random() * 100}%`;
+        p.style.animationDuration = `${Math.random() * 8 + 4}s`;
+        p.style.animationDelay = `${Math.random() * 5}s`;
+        container.appendChild(p);
+      }
+    }
 
     // Texto de la bio
     const bioText = "Somos una empresa comprometida en ofrecer el mejor producto al mejor precio, con calidad y atención garantizada.";
@@ -431,6 +475,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
+      createParticles();
       obtenerDatosDiscord();
       handleTypingLoop();
       setInterval(updateClock, 1000);
